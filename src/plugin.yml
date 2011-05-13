@@ -1,0 +1,5 @@
+name: SimpleTemplate
+version: %VERSION%
+depend: [MessageManager]
+main: edgruberman.bukkit.simpletemplate.Main
+author: EdGruberman (ed@rjump.com)
