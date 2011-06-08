@@ -4,7 +4,7 @@ import edgruberman.bukkit.messagemanager.MessageManager;
 
 public class Main extends org.bukkit.plugin.java.JavaPlugin {
 
-    public static MessageManager messageManager;
+    protected static MessageManager messageManager;
     
     public void onLoad() {
         Configuration.load(this);
