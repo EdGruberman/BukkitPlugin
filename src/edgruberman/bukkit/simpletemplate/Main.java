@@ -4,16 +4,20 @@ import edgruberman.bukkit.messagemanager.MessageManager;
 
 public class Main extends org.bukkit.plugin.java.JavaPlugin {
 
+    protected static ConfigurationManager configurationManager;
     protected static MessageManager messageManager;
     
     public void onLoad() {
-        Configuration.load(this);
-    }
-	
-    public void onEnable() {
+        Main.configurationManager = new ConfigurationManager(this);
+        Main.configurationManager.load();
+        
         Main.messageManager = new MessageManager(this);
         Main.messageManager.log("Version " + this.getDescription().getVersion());
         
+        // TODO: Add plugin load code here.
+    }
+	
+    public void onEnable() {
         // TODO: Add plugin enable code here.
 
         Main.messageManager.log("Plugin Enabled");
