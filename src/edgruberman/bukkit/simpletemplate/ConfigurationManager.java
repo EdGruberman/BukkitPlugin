@@ -98,9 +98,10 @@ public class ConfigurationManager {
                 if (this.plugin.getServer().getScheduler().isQueued(ConfigurationManager.taskSave)) return;
                 
                 // Schedule task to force save.
+                final ConfigurationManager configurationManager = this;
                 ConfigurationManager.taskSave = this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(
                           this.plugin
-                        , new Runnable() { public void run() { Main.configurationManager.save(true); } }
+                        , new Runnable() { public void run() { configurationManager.save(true); } }
                         , (ConfigurationManager.MAX_SAVE - lastSave) * ConfigurationManager.TICKS_PER_SECOND
                 );
             
