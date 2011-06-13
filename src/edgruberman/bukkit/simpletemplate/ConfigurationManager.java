@@ -15,16 +15,16 @@ public class ConfigurationManager {
     private static final int TICKS_PER_SECOND = 20;
     
     // Name of configuration file. (Used for both default supplied in JAR and the active one in the file system.)
-    private static String FILE = "config.yml";
+    private String file = "config.yml";
     
     // Path to default configuration file supplied in JAR.
-    private static String DEFAULT_PATH = "/defaults/" + ConfigurationManager.FILE;
+    private String defaultPath = "/defaults/" + this.file;
     
     // Shortest duration in seconds a configuration file save can occur in for non-forced save requests.
-    private static int MAX_SAVE = 10;
+    private int maxSave = 10;
     
-    private static Calendar LAST_SAVE = null;
-    private static Integer taskSave = null;
+    private Calendar lastSave = null;
+    private Integer taskSave = null;
     
     private Plugin plugin;
     
@@ -38,10 +38,10 @@ public class ConfigurationManager {
      * @param plugin Plugin to load configuration for.
      */
     protected void load() {
-        File fileConfig = new File(this.plugin.getDataFolder(), ConfigurationManager.FILE);
+        File fileConfig = new File(this.plugin.getDataFolder(), this.file);
         if (!fileConfig.exists()) {
             try {
-                this.extract(this.plugin.getClass().getResource(ConfigurationManager.DEFAULT_PATH), fileConfig);
+                this.extract(this.plugin.getClass().getResource(this.defaultPath), fileConfig);
             } catch (Exception e) {
                 System.err.println("Unable to extract default configuration file.");
                 e.printStackTrace();
@@ -89,20 +89,20 @@ public class ConfigurationManager {
         if (!force) {
             // Determine how long since last save.
             long lastSave = -1;
-            if (ConfigurationManager.LAST_SAVE != null)
-                lastSave = (System.currentTimeMillis() - ConfigurationManager.LAST_SAVE.getTimeInMillis()) / 1000;
+            if (this.lastSave != null)
+                lastSave = (System.currentTimeMillis() - this.lastSave.getTimeInMillis()) / 1000;
             
             // Schedule task to run if last save was less than MAX_SAVE.
-            if (lastSave >= 0 && lastSave < ConfigurationManager.MAX_SAVE) {
+            if (lastSave >= 0 && lastSave < this.maxSave) {
                 // If task already scheduled return and let currently scheduled task run when expected.
-                if (this.plugin.getServer().getScheduler().isQueued(ConfigurationManager.taskSave)) return;
+                if (this.plugin.getServer().getScheduler().isQueued(this.taskSave)) return;
                 
                 // Schedule task to force save.
                 final ConfigurationManager configurationManager = this;
-                ConfigurationManager.taskSave = this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(
+                this.taskSave = this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(
                           this.plugin
                         , new Runnable() { public void run() { configurationManager.save(true); } }
-                        , (ConfigurationManager.MAX_SAVE - lastSave) * ConfigurationManager.TICKS_PER_SECOND
+                        , (this.maxSave - lastSave) * ConfigurationManager.TICKS_PER_SECOND
                 );
             
                 return;
@@ -110,6 +110,6 @@ public class ConfigurationManager {
         }
         
         this.plugin.getConfiguration().save();
-        ConfigurationManager.LAST_SAVE = new GregorianCalendar();
+        this.lastSave = new GregorianCalendar();
     }
 }
