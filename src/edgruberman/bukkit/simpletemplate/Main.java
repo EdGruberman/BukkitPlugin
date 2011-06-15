@@ -20,6 +20,8 @@ public class Main extends org.bukkit.plugin.java.JavaPlugin {
     public void onEnable() {
         // TODO: Add plugin enable code here.
 
+        new CommandManager(this);
+        
         Main.messageManager.log("Plugin Enabled");
     }
     
