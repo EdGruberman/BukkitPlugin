@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 
 import edgruberman.bukkit.messagemanager.MessageLevel;
@@ -16,7 +17,7 @@ public class CommandManager implements CommandExecutor {
     protected CommandManager (Main plugin) {
         this.plugin = plugin;
         
-        this.plugin.getCommand("command").setExecutor(this);
+        this.setExecutorOf("command");
     }
 
     @Override
@@ -34,6 +35,21 @@ public class CommandManager implements CommandExecutor {
         // TODO Add command processing logic here.
         
         return false;
+    }
+    
+    /**
+     * Registers this class as executor for a chat/console command.
+     * 
+     * @param label Command label to register.
+     */
+    private void setExecutorOf(String label) {
+        PluginCommand command = this.plugin.getCommand("command");
+        if (command == null) {
+            Main.messageManager.log(MessageLevel.WARNING, "Unable to register \"" + label + "\" command.");
+            return;
+        }
+        
+        command.setExecutor(this);
     }
     
     /**
