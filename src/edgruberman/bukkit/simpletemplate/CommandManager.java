@@ -43,7 +43,7 @@ public class CommandManager implements CommandExecutor {
      * @param label Command label to register.
      */
     private void setExecutorOf(String label) {
-        PluginCommand command = this.plugin.getCommand("command");
+        PluginCommand command = this.plugin.getCommand(label);
         if (command == null) {
             Main.messageManager.log(MessageLevel.WARNING, "Unable to register \"" + label + "\" command.");
             return;
