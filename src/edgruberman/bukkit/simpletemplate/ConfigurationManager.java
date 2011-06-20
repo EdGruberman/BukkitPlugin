@@ -41,8 +41,6 @@ public class ConfigurationManager {
     /**
      * Loads the configuration file from plugin data folder.  This method will
      * create the file from the default supplied in the JAR if necessary.
-     * 
-     * @param plugin Plugin to load configuration for.
      */
     protected void load() {
         File fileConfig = new File(this.plugin.getDataFolder(), ConfigurationManager.FILE);
