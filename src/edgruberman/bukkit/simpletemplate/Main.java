@@ -22,14 +22,13 @@ public class Main extends org.bukkit.plugin.java.JavaPlugin {
 
         new CommandManager(this);
         
-        Main.messageManager.log("Plugin Enabled");
+        Main.getMessageManager().log("Plugin Enabled");
     }
     
     public void onDisable() {
         // TODO: Add plugin disable code here.
         
-        Main.messageManager.log("Plugin Disabled");
-        Main.messageManager = null;
+        Main.getMessageManager().log("Plugin Disabled");
     }
     
     protected static ConfigurationManager getConfigurationManager() {
