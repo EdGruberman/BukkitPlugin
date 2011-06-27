@@ -4,12 +4,12 @@ import edgruberman.bukkit.messagemanager.MessageManager;
 
 public class Main extends org.bukkit.plugin.java.JavaPlugin {
 
-    private static ConfigurationManager configurationManager;
+    private static ConfigurationFile configurationFile;
     private static MessageManager messageManager;
     
     public void onLoad() {
-        Main.configurationManager = new ConfigurationManager(this);
-        Main.getConfigurationManager().load();
+        Main.configurationFile = new ConfigurationFile(this, "config.yml", "/defaults/config.yml", 10);
+        Main.getConfigurationFile().load();
         
         Main.messageManager = new MessageManager(this);
         Main.getMessageManager().log("Version " + this.getDescription().getVersion());
@@ -31,8 +31,8 @@ public class Main extends org.bukkit.plugin.java.JavaPlugin {
         Main.getMessageManager().log("Plugin Disabled");
     }
     
-    protected static ConfigurationManager getConfigurationManager() {
-        return Main.configurationManager;
+    protected static ConfigurationFile getConfigurationFile() {
+        return Main.configurationFile;
     }
     
     protected static MessageManager getMessageManager() {
