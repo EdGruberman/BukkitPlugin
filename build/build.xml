@@ -8,6 +8,7 @@
     <property name="author" value="EdGruberman (ed@rjump.com)"/>
         
     <property name="src" location="../src"/>
+    <property name="resources" location="../resources"/>
     <property name="lib" location="../lib"/>
     <property name="lib-shared" location="../../Shared/lib"/>
     <property name="dist" location="../dist"/>
@@ -37,13 +38,14 @@
             <classpath refid="classpath"/>
         </javac>
 
-        <copy file="${src}/plugin.yml" tofile="${stage}/jar/plugin.yml"/>
+        <copy file="${resources}/plugin.yml" tofile="${stage}/jar/plugin.yml"/>
         <property file="version.properties"/>
         <property name="version" value="${version.major}.${version.minor}.${version.revision}${version.type}${version.build}"/>
         <replace file="${stage}/jar/plugin.yml" token="%VERSION%" value="${version}"/>
+        
         <mkdir dir="${stage}/jar/defaults"/>
         <copy todir="${stage}/jar/defaults">
-            <fileset dir="${src}/defaults"/>
+            <fileset dir="${resources}/defaults"/>
         </copy>
         
         <manifest file="${stage}/MANIFEST.MF">
