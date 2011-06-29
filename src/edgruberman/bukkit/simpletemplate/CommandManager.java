@@ -8,20 +8,22 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import edgruberman.bukkit.messagemanager.MessageLevel;
 
-public class CommandManager implements CommandExecutor {
-    private Main plugin;
-
-    protected CommandManager (Main plugin) {
+final class CommandManager implements CommandExecutor {
+    
+    private final JavaPlugin plugin;
+    
+    CommandManager(final JavaPlugin plugin) {
         this.plugin = plugin;
         
         this.setExecutorOf("command");
     }
-
+    
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] split) {
+    public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] split) {
         Main.getMessageManager().log(MessageLevel.FINE
                 , ((sender instanceof Player) ? ((Player) sender).getName() : "[CONSOLE]")
                 + " issued command: " + label + " " + join(split)
@@ -42,7 +44,7 @@ public class CommandManager implements CommandExecutor {
      * 
      * @param label Command label to register.
      */
-    private void setExecutorOf(String label) {
+    private void setExecutorOf(final String label) {
         PluginCommand command = this.plugin.getCommand(label);
         if (command == null) {
             Main.getMessageManager().log(MessageLevel.WARNING, "Unable to register \"" + label + "\" command.");
@@ -55,21 +57,21 @@ public class CommandManager implements CommandExecutor {
     /**
      * Concatenate all string elements of an array together with a space.
      * 
-     * @param s String array
-     * @return Concatenated elements
+     * @param s string array
+     * @return concatenated elements
      */
-    private static String join(String[] s) {
+    private static String join(final String[] s) {
         return join(Arrays.asList(s), " ");
     }
     
     /**
      * Combine all the elements of a list together with a delimiter between each.
      * 
-     * @param list List of elements to join.
-     * @param delim Delimiter to place between each element.
-     * @return String combined with all elements and delimiters.
+     * @param list list of elements to join
+     * @param delim delimiter to place between each element
+     * @return string combined with all elements and delimiters
      */
-    private static String join(List<String> list, String delim) {
+    private static String join(final List<String> list, final String delim) {
         if (list == null || list.isEmpty()) return "";
      
         StringBuilder sb = new StringBuilder();

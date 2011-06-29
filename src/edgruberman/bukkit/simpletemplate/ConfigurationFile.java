@@ -1,6 +1,8 @@
 package edgruberman.bukkit.simpletemplate;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -19,13 +21,13 @@ import org.bukkit.plugin.Plugin;
  * 
  * @author EdGruberman
  */
-public final class ConfigurationFile {
+final class ConfigurationFile {
     
     private static final int TICKS_PER_SECOND = 20;
     
-    private Plugin owner;
-    private File file;
-    private URL defaults;
+    private final Plugin owner;
+    private final File file;
+    private final URL defaults;
     private int maxSaveFrequency;
     private Calendar lastSave = null;
     private Integer taskSave = null;
@@ -38,7 +40,7 @@ public final class ConfigurationFile {
      * @param file name of file in the default data directory.
      * @param defaults path to default configuration file supplied in JAR.
      */
-    protected ConfigurationFile(Plugin owner, String file, String defaults) {
+    ConfigurationFile(final Plugin owner, final String file, final String defaults) {
         this(owner, file, defaults, -1);
     }
     
@@ -51,7 +53,7 @@ public final class ConfigurationFile {
      * @param defaults path to default configuration file supplied in JAR.
      * @param maxSaveFrequency shortest duration in seconds each save can occur.
      */
-    protected ConfigurationFile(Plugin owner, String file, String defaults, int maxSaveFrequency) {
+    ConfigurationFile(final Plugin owner, final String file, final String defaults, final int maxSaveFrequency) {
         this.owner = owner;
         this.file = new File(this.owner.getDataFolder(), file);
         this.defaults = this.owner.getClass().getResource(defaults);
@@ -62,12 +64,17 @@ public final class ConfigurationFile {
      * Loads the configuration file from plugin data folder.  This method will
      * create the file from the default supplied in the JAR if necessary.
      */
-    protected void load() {
+    void load() {
         if (!this.file.exists()) {
             try {
-                this.extract(this.defaults, this.file);
-            } catch (Exception e) {
-                System.err.println("[" + this.owner.getDescription().getName() + "] Unable to extract default configuration file.");
+                ConfigurationFile.extract(this.defaults, this.file);
+            
+            } catch (FileNotFoundException e) {
+                System.err.println("[" + this.owner.getDescription().getName() + "] Unable to create configuration file \"" + this.file.getPath() + "\".");
+                e.printStackTrace();
+                
+            } catch (IOException e) {
+                System.err.println("[" + this.owner.getDescription().getName() + "] Unable to extract default configuration file from \"" + this.defaults.getFile() + "\".");
                 e.printStackTrace();
             }
         }
@@ -75,33 +82,11 @@ public final class ConfigurationFile {
         this.owner.getConfiguration().load();
     }
     
-    /**
-     * Extract a file from the JAR to the local file system.
-     * 
-     * @param source Location of file in JAR.
-     * @param destination File system path to save file to.
-     * @throws Exception
-     */
-    private void extract(URL source, File destination) throws Exception {
-        InputStream in = source.openStream();
-        
-        destination.getParentFile().mkdir();
-        OutputStream out = new FileOutputStream(destination);
-        
-        byte[] buf = new byte[1024];
-        int len;
-        while ((len = in.read(buf)) > 0) {
-            out.write(buf, 0, len);
-        }
-        in.close();
-        out.close();
-    }
-    
-    protected int getMaxSaveFrequency() {
+    int getMaxSaveFrequency() {
         return this.maxSaveFrequency;
     }
     
-    protected void setMaxSaveFrequency(int frequency) {
+    void setMaxSaveFrequency(final int frequency) {
         this.maxSaveFrequency = frequency;
     }
     
@@ -109,7 +94,7 @@ public final class ConfigurationFile {
      * Save the configuration file immediately. All cached save requests will be
      * saved to the file system.
      */
-    protected void save() {
+    void save() {
         this.save(true);
     }
     
@@ -121,7 +106,7 @@ public final class ConfigurationFile {
      * 
      * @param immediately true to force a save of the configuration file immediately.
      */
-    protected void save(boolean immediately) {
+    void save(final boolean immediately) {
         if (!immediately) {
             // Determine how long since last save.
             long sinceLastSave = this.maxSaveFrequency;
@@ -147,5 +132,31 @@ public final class ConfigurationFile {
         
         this.owner.getConfiguration().save();
         this.lastSave = new GregorianCalendar();
+    }
+    
+    /**
+     * Extract a file from the JAR to the local file system.
+     * 
+     * @param source file in JAR
+     * @param destination file to save out to in file system
+     */
+    private static void extract(final URL source, final File destination) throws FileNotFoundException, IOException {
+        destination.getParentFile().mkdir();
+        
+        InputStream in = null;
+        OutputStream out = null;
+        int len;
+        byte[] buf = new byte[4096];
+        
+        try {
+            in = source.openStream();
+            out = new FileOutputStream(destination);
+            while ((len = in.read(buf)) > 0)
+                out.write(buf, 0, len);
+            
+        } finally {
+            if (in != null) in.close();
+            if (out != null) out.close();
+        }
     }
 }

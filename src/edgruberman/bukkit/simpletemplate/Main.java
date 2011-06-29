@@ -2,7 +2,7 @@ package edgruberman.bukkit.simpletemplate;
 
 import edgruberman.bukkit.messagemanager.MessageManager;
 
-public class Main extends org.bukkit.plugin.java.JavaPlugin {
+public final class Main extends org.bukkit.plugin.java.JavaPlugin {
 
     private static ConfigurationFile configurationFile;
     private static MessageManager messageManager;
@@ -19,7 +19,7 @@ public class Main extends org.bukkit.plugin.java.JavaPlugin {
 	
     public void onEnable() {
         // TODO: Add plugin enable code here.
-
+        
         new CommandManager(this);
         
         Main.getMessageManager().log("Plugin Enabled");
@@ -31,11 +31,11 @@ public class Main extends org.bukkit.plugin.java.JavaPlugin {
         Main.getMessageManager().log("Plugin Disabled");
     }
     
-    protected static ConfigurationFile getConfigurationFile() {
+    static ConfigurationFile getConfigurationFile() {
         return Main.configurationFile;
     }
     
-    protected static MessageManager getMessageManager() {
+    static MessageManager getMessageManager() {
         return Main.messageManager;
     }
 }
