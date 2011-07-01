@@ -26,7 +26,7 @@ final class CommandManager implements CommandExecutor {
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] split) {
         Main.getMessageManager().log(MessageLevel.FINE
                 , ((sender instanceof Player) ? ((Player) sender).getName() : "[CONSOLE]")
-                + " issued command: " + label + " " + join(split)
+                + " issued command: " + label + " " + CommandManager.join(split)
         );
         
         if (!sender.isOp()) {
