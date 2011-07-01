@@ -8,7 +8,7 @@ public final class Main extends org.bukkit.plugin.java.JavaPlugin {
     private static MessageManager messageManager;
     
     public void onLoad() {
-        Main.configurationFile = new ConfigurationFile(this, "config.yml", "/defaults/config.yml", 10);
+        Main.configurationFile = new ConfigurationFile(this, "config.yml", "/defaults/config.yml");
         Main.getConfigurationFile().load();
         
         Main.messageManager = new MessageManager(this);
