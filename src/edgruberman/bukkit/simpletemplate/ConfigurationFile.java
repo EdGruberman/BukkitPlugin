@@ -24,8 +24,25 @@ import edgruberman.bukkit.messagemanager.MessageLevel;
  */
 public final class ConfigurationFile {
     
-    private static final int TICKS_PER_SECOND = 20;
+    /**
+     * Standard plugin configuration file.
+     */
     private static final String PLUGIN_FILE = "config.yml";
+    
+    /**
+     * Path in JAR to find files containing default values.
+     */
+    private static final String DEFAULTS = "/defaults/";
+    
+    /**
+     * Default maximum save frequency.
+     */
+    private static final int DEFAULT_SAVE = -1;
+    
+    /**
+     * Clock ticks per second; Used to determine durations between saves.
+     */
+    private static final int TICKS_PER_SECOND = 20;
     
     private final Plugin owner;
     private final File file;
@@ -79,7 +96,7 @@ public final class ConfigurationFile {
      * @param defaults path to default configuration file supplied in JAR
      */
     ConfigurationFile(final Plugin owner, final String file, final String defaults) {
-        this(owner, file, defaults, -1);
+        this(owner, file, defaults, ConfigurationFile.DEFAULT_SAVE);
     }
     
     /**
@@ -95,7 +112,7 @@ public final class ConfigurationFile {
         this.owner = owner;
         
         this.file = new File(this.owner.getDataFolder(), (file != null ? file : ConfigurationFile.PLUGIN_FILE));
-        this.defaults = this.owner.getClass().getResource((defaults != null ? defaults : "/defaults/" + this.file));
+        this.defaults = this.owner.getClass().getResource((defaults != null ? defaults : ConfigurationFile.DEFAULTS + this.file.getName()));
         this.maxSaveFrequency = maxSaveFrequency;
         if (this.file.equals(ConfigurationFile.PLUGIN_FILE)) {
             this.configuration = this.owner.getConfiguration();
