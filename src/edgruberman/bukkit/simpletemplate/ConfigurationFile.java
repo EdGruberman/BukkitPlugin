@@ -114,7 +114,7 @@ public final class ConfigurationFile {
         this.file = new File(this.owner.getDataFolder(), (file != null ? file : ConfigurationFile.PLUGIN_FILE));
         this.defaults = this.owner.getClass().getResource((defaults != null ? defaults : ConfigurationFile.DEFAULTS + this.file.getName()));
         this.maxSaveFrequency = maxSaveFrequency;
-        if (this.file.equals(ConfigurationFile.PLUGIN_FILE)) {
+        if (this.file.getName().equals(ConfigurationFile.PLUGIN_FILE)) {
             this.configuration = this.owner.getConfiguration();
         } else {
             this.configuration = new Configuration(this.file);
