@@ -24,14 +24,14 @@ final class CommandManager implements CommandExecutor {
     
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] split) {
-        Main.getMessageManager().log(
+        Main.messageManager.log(
                 ((sender instanceof Player) ? ((Player) sender).getName() : "[CONSOLE]")
                     + " issued command: " + label + " " + CommandManager.join(split)
                 , MessageLevel.FINE
         );
         
         if (!sender.isOp()) {
-            Main.getMessageManager().respond(sender, "You must be a server operator to use this command.", MessageLevel.RIGHTS);
+            Main.messageManager.respond(sender, "You must be a server operator to use this command.", MessageLevel.RIGHTS);
             return false;
         }
 
@@ -48,7 +48,7 @@ final class CommandManager implements CommandExecutor {
     private void setExecutorOf(final String label) {
         PluginCommand command = this.plugin.getCommand(label);
         if (command == null) {
-            Main.getMessageManager().log("Unable to register \"" + label + "\" command.", MessageLevel.WARNING);
+            Main.messageManager.log("Unable to register \"" + label + "\" command.", MessageLevel.WARNING);
             return;
         }
         
