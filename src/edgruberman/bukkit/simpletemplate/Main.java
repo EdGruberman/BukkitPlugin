@@ -9,7 +9,6 @@ public final class Main extends org.bukkit.plugin.java.JavaPlugin {
     
     public void onLoad() {
         Main.configurationFile = new ConfigurationFile(this);
-        Main.configurationFile.load();
         
         Main.messageManager = new MessageManager(this);
         Main.messageManager.log("Version " + this.getDescription().getVersion());
