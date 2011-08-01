@@ -1,5 +1,30 @@
 name: SimpleTemplate
+description: Template code used for Bukkit plugins.
 version: %VERSION%
 depend: [MessageManager]
-main: edgruberman.bukkit.simpletemplate.Main
 author: EdGruberman (ed@rjump.com)
+main: edgruberman.bukkit.simpletemplate.Main
+commands:
+    name:
+        description: Does something related to name.
+        permission: simpletemplate.name
+        usage: |
+            /<command>[ status[ <World>]] - Display status related to name in <World>.
+            /<command> detail[ <World>] - Display detail related to name in <World>.
+            /<command> reload - Reload configuration files.
+permissions:
+    simpletemplate.name.info:
+        description: Can use basic information actions of name command.
+        default: true
+        children:
+            simpletemplate.name.status: true
+            simpletemplate.name.detail: true
+    simpletemplate.name.status:
+        description: Can use status action of name command.
+        default: op
+    simpletemplate.name.detail:
+        description: Can use detail action of name command.
+        default: op
+    simpletemplate.name.reload:
+        description: Can use reload action of name command.
+        default: op
