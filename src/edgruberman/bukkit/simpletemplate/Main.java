@@ -13,6 +13,7 @@ public final class Main extends org.bukkit.plugin.java.JavaPlugin {
     
     static ConfigurationFile configurationFile;
     
+    @Override
     public void onLoad() {        
         Main.messageManager = new MessageManager(this);
         Main.messageManager.log("Version " + this.getDescription().getVersion());
@@ -22,6 +23,7 @@ public final class Main extends org.bukkit.plugin.java.JavaPlugin {
         // TODO: Add plugin load code here.
     }
 	
+    @Override
     public void onEnable() {
         this.loadConfiguration();
         
@@ -32,6 +34,7 @@ public final class Main extends org.bukkit.plugin.java.JavaPlugin {
         Main.messageManager.log("Plugin Enabled");
     }
     
+    @Override
     public void onDisable() {
         // TODO: Add plugin disable code here.
         
