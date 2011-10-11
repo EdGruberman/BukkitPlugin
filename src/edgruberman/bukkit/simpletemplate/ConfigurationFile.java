@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.config.Configuration;
@@ -47,7 +49,7 @@ public final class ConfigurationFile {
     private final URL defaults;
     private final Configuration configuration;
     private int maxSaveFrequency;
-    private Long lastSave = null;
+    private Calendar lastSave = null;
     private Integer taskSave = null;
     
     /**
@@ -124,14 +126,9 @@ public final class ConfigurationFile {
     /**
      * Loads the configuration file from owning plugin's data folder.  This
      * method will create the file from the default supplied in the JAR if 
-     * the file does not exist and the default is supplied.  This method
-     * will force any queued save requests to run immediately.
+     * the file does not exist and the default is supplied.
      */
     void load() {
-        // Flush any pending save requests first to avoid losing any previous edits not yet committed.
-        if (this.isSaveQueued()) this.save();
-        
-        // Use default file if supplied and current file does not exist.
         if (!this.file.exists() && this.defaults != null) {
             try {
                 ConfigurationFile.extract(this.defaults, this.file);
@@ -162,9 +159,8 @@ public final class ConfigurationFile {
     }
     
     /**
-     * Save the configuration file immediately. All cached edits will
-     * be saved to the file system. Any queued saves will be
-     * cancelled.
+     * Save the configuration file immediately. All cached save requests will be
+     * saved to the file system
      */
     void save() {
         this.save(true);
@@ -174,8 +170,7 @@ public final class ConfigurationFile {
      * Request a save of the configuration file. If request is not required to
      * be done immediately and last save was less than configured max frequency
      * then request will be cached and a scheduled task will kick off after the
-     * max frequency has expired since last save. If request is for immediately
-     * any queued save requests will be cancelled to avoid another save after.
+     * max frequency has expired since last save.
      * 
      * @param immediately true to force a save of the configuration file immediately
      */
@@ -184,13 +179,13 @@ public final class ConfigurationFile {
             // Determine how long since last save.
             long sinceLastSave = this.maxSaveFrequency;
             if (this.lastSave != null)
-                sinceLastSave = (System.currentTimeMillis() - this.lastSave) / 1000;
+                sinceLastSave = (System.currentTimeMillis() - this.lastSave.getTimeInMillis()) / 1000;
             
             // Schedule a cache flush to run if last save was less than maximum save frequency.
             if (sinceLastSave < this.maxSaveFrequency) {
                 // If task already scheduled let it run when expected.
-                if (this.isSaveQueued()) {
-                    Main.messageManager.log("Save request already queued; Last save was " + sinceLastSave + " seconds ago.", MessageLevel.FINEST);
+                if (this.taskSave != null && this.owner.getServer().getScheduler().isQueued(this.taskSave)) {
+                    Main.messageManager.log("Save request queued; Last save was " + sinceLastSave + " seconds ago.", MessageLevel.FINEST);
                     return;
                 }
                 
@@ -201,27 +196,14 @@ public final class ConfigurationFile {
                         , new Runnable() { public void run() { configurationFile.save(true); } }
                         , (this.maxSaveFrequency - sinceLastSave) * ConfigurationFile.TICKS_PER_SECOND
                 );
-                
-                Main.messageManager.log("Save request queued; Last save was " + sinceLastSave + " seconds ago.", MessageLevel.FINEST);
+            
                 return;
             }
-        } else if (this.isSaveQueued()) {
-            // Since we are forcing a save right now, avoid the scheduled save coming in after and re-saving unnecessarily.
-            this.owner.getServer().getScheduler().cancelTask(this.taskSave);
         }
         
         this.configuration.save();
-        this.lastSave = System.currentTimeMillis();
+        this.lastSave = new GregorianCalendar();
         Main.messageManager.log("Configuration file " + this.file.getName() + " saved.", MessageLevel.FINEST);
-    }
-    
-    /**
-     * Determine if save request is currently scheduled to execute.
-     * 
-     * @return true if save request is pending; otherwise false
-     */
-    private boolean isSaveQueued() {
-        return (this.taskSave != null && this.owner.getServer().getScheduler().isQueued(this.taskSave));
     }
     
     /**
