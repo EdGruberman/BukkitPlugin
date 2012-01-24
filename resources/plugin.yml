@@ -5,26 +5,36 @@ depend: [MessageManager]
 author: EdGruberman (ed@rjump.com)
 main: edgruberman.bukkit.simpletemplate.Main
 commands:
-    name:
-        description: Does something related to name.
-        permission: simpletemplate.name
+    single:
+        description: Does something that only needs a single simple command.
+        permission: simpletemplate.single
+        usage: /<command> - Performs a simple action
+    multiple:
+        description: Does something different depending upon arguments.
+        permission: simpletemplate.multiple
         usage: |
-            /<command>[ status[ <World>]] - Display status related to name in <World>.
-            /<command> detail[ <World>] - Display detail related to name in <World>.
+            /<command>[ status[ <Something>]] - Display status related to something.
+            /<command> detail[ <Something>] - Display detail related to something.
             /<command> reload - Reload configuration files.
 permissions:
-    simpletemplate.name.info:
-        description: Can use basic information actions of name command.
+    simpletemplate.single:
+        description: Can use single command.
+        default: true
+    simpletemplate.multiple:
+        description: Can use multiple command.
+        default: true
+    simpletemplate.multiple.info:
+        description: Can use basic information actions of multiple command.
         default: true
         children:
-            simpletemplate.name.status: true
-            simpletemplate.name.detail: true
-    simpletemplate.name.status:
-        description: Can use status action of name command.
+            simpletemplate.multiple.status: true
+            simpletemplate.multiple.detail: true
+    simpletemplate.multiple.status:
+        description: Can use status action of multiple command.
         default: op
-    simpletemplate.name.detail:
-        description: Can use detail action of name command.
+    simpletemplate.multiple.detail:
+        description: Can use detail action of multiple command.
         default: op
-    simpletemplate.name.reload:
-        description: Can use reload action of name command.
+    simpletemplate.multiple.reload:
+        description: Can use reload action of multiple command.
         default: op

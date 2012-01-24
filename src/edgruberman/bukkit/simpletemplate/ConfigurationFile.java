@@ -109,7 +109,6 @@ public final class ConfigurationFile {
         this.file = new File(this.owner.getDataFolder(), (file != null ? file : ConfigurationFile.PLUGIN_FILE));
         this.defaults = (defaults != null ? defaults : ConfigurationFile.DEFAULTS + this.file.getName());
         this.maxSaveFrequency = maxSaveFrequency;
-        this.load();
     }
     
     /**
@@ -118,16 +117,19 @@ public final class ConfigurationFile {
      * exist and defaults are supplied in the JAR, the defaults will be used.
      * Otherwise an empty configuration will be set.
      */
-    void load() {
+    FileConfiguration load() {
+        // Flush any pending save requests first to avoid losing any previous edits not yet committed
+        if (this.isSaveQueued()) this.save();
+        
         this.config = YamlConfiguration.loadConfiguration(this.file);
-        if (this.file.exists()) return;
+        if (this.file.exists()) return this.config;
         
         // Check if defaults are supplied in JAR
-        InputStream defaults = (this.defaults != null ? this.owner.getResource(this.defaults) : null);
+        InputStream defaults = (this.defaults != null ? this.owner.getClass().getResourceAsStream(this.defaults) : null);
         if (defaults == null) {
             // No file, no defaults, reset to empty configuration
             this.config = new YamlConfiguration();
-            return;
+            return this.config;
         }
 
         // Load defaults supplied in JAR
@@ -136,6 +138,7 @@ public final class ConfigurationFile {
         this.save();
         
         this.config = YamlConfiguration.loadConfiguration(this.file);
+        return this.config;
     }
     
     int getMaxSaveFrequency() {
@@ -176,10 +179,12 @@ public final class ConfigurationFile {
             // Schedule a cache flush to run if last save was less than maximum save frequency.
             if (sinceLastSave < this.maxSaveFrequency) {
                 // If task already scheduled let it run when expected.
-                if (this.taskSave != null && this.owner.getServer().getScheduler().isQueued(this.taskSave)) {
-                    Main.messageManager.log("Save request queued; Last save was " + sinceLastSave + " seconds ago.", MessageLevel.FINEST);
+                if (this.isSaveQueued()) {
+                    Main.messageManager.log("Save request already queued; Last save was " + sinceLastSave + " seconds ago; " + this.file, MessageLevel.FINEST);
                     return;
                 }
+                
+                Main.messageManager.log("Queueing configuration file save request; Last save was " + sinceLastSave + " seconds ago; " + this.file, MessageLevel.FINEST);
                 
                 // Schedule task to save cache to file system.
                 final ConfigurationFile configurationFile = this;
@@ -188,7 +193,7 @@ public final class ConfigurationFile {
                         , new Runnable() { public void run() { configurationFile.save(true); } }
                         , (this.maxSaveFrequency - sinceLastSave) * ConfigurationFile.TICKS_PER_SECOND
                 );
-            
+                
                 return;
             }
         }
@@ -197,13 +202,24 @@ public final class ConfigurationFile {
             this.config.save(this.file);
             
         } catch (IOException e) {
-            Main.messageManager.log("Unable to save configuration file: " + this.file, MessageLevel.SEVERE, e);
+            Main.messageManager.log("Unable to save configuration file; " + this.file, MessageLevel.SEVERE, e);
             return;
             
         } finally {
             this.lastSaveAttempt = System.currentTimeMillis();
         }
         
-        Main.messageManager.log("Saved configuration file: " + this.file, MessageLevel.FINEST);
+        this.taskSave = null;
+        
+        Main.messageManager.log("Saved configuration file; " + this.file, MessageLevel.FINEST);
+    }
+    
+    /**
+     * Determine if save request is currently scheduled to execute.
+     * 
+     * @return true if save request is pending; otherwise false
+     */
+    boolean isSaveQueued() {
+        return (this.taskSave != null && this.owner.getServer().getScheduler().isQueued(this.taskSave));
     }
 }

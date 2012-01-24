@@ -1,24 +1,26 @@
 package edgruberman.bukkit.simpletemplate;
 
-import edgruberman.bukkit.messagemanager.MessageManager;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public final class Main extends org.bukkit.plugin.java.JavaPlugin {
+import edgruberman.bukkit.messagemanager.MessageManager;
+import edgruberman.bukkit.simpletemplate.commands.Multiple;
+import edgruberman.bukkit.simpletemplate.commands.Single;
+
+public final class Main extends JavaPlugin {
     
-    /**
-     * Prefix for all permissions used in this plugin.
-     */
     public static final String PERMISSION_PREFIX = "simpletemplate";
     
     public static MessageManager messageManager;
     
-    static ConfigurationFile configurationFile;
+    private ConfigurationFile configurationFile;
     
     @Override
-    public void onLoad() {        
+    public void onLoad() {
         Main.messageManager = new MessageManager(this);
         Main.messageManager.log("Version " + this.getDescription().getVersion());
         
-        Main.configurationFile = new ConfigurationFile(this);
+        this.configurationFile = new ConfigurationFile(this);
         
         // TODO: Add plugin load code here.
     }
@@ -29,7 +31,8 @@ public final class Main extends org.bukkit.plugin.java.JavaPlugin {
         
         // TODO: Add plugin enable code here.
         
-        new edgruberman.bukkit.simpletemplate.commands.Name(this);
+        new Single(this);
+        new Multiple(this);
         
         Main.messageManager.log("Plugin Enabled");
     }
@@ -38,12 +41,15 @@ public final class Main extends org.bukkit.plugin.java.JavaPlugin {
     public void onDisable() {
         // TODO: Add plugin disable code here.
         
+        if (this.configurationFile.isSaveQueued()) this.configurationFile.save();
+        
         Main.messageManager.log("Plugin Disabled");
     }
     
     public void loadConfiguration() {
-        Main.configurationFile.load();
+        FileConfiguration config = this.configurationFile.load();
         
         // TODO: Load configuration settings here.
     }
+    
 }
