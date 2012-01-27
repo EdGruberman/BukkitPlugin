@@ -47,6 +47,7 @@ public final class Main extends JavaPlugin {
     }
     
     public void loadConfiguration() {
+        @SuppressWarnings("unused")
         FileConfiguration config = this.configurationFile.load();
         
         // TODO: Load configuration settings here.
