@@ -1,4 +1,4 @@
-package edgruberman.bukkit.util.commands;
+package edgruberman.bukkit.simpletemplate.commands.util;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

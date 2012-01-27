@@ -1,4 +1,4 @@
-package edgruberman.bukkit.util.commands;
+package edgruberman.bukkit.simpletemplate.commands.util;
 
 import java.util.ArrayList;
 import java.util.List;

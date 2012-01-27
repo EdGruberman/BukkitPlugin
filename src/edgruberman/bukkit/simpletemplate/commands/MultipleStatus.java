@@ -1,8 +1,8 @@
 package edgruberman.bukkit.simpletemplate.commands;
 
-import edgruberman.bukkit.util.commands.Action;
-import edgruberman.bukkit.util.commands.Context;
-import edgruberman.bukkit.util.commands.Handler;
+import edgruberman.bukkit.simpletemplate.commands.util.Action;
+import edgruberman.bukkit.simpletemplate.commands.util.Context;
+import edgruberman.bukkit.simpletemplate.commands.util.Handler;
 
 final class MultipleStatus extends Action {
 

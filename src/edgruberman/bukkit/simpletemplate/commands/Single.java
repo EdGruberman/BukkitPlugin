@@ -2,8 +2,8 @@ package edgruberman.bukkit.simpletemplate.commands;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import edgruberman.bukkit.util.commands.Action;
-import edgruberman.bukkit.util.commands.Context;
+import edgruberman.bukkit.simpletemplate.commands.util.Action;
+import edgruberman.bukkit.simpletemplate.commands.util.Context;
 
 public final class Single extends Action {
 

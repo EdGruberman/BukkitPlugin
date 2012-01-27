@@ -2,7 +2,7 @@ package edgruberman.bukkit.simpletemplate.commands;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import edgruberman.bukkit.util.commands.Handler;
+import edgruberman.bukkit.simpletemplate.commands.util.Handler;
 
 public final class Multiple extends Handler {
 
