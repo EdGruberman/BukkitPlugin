@@ -6,11 +6,11 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Single action of a command.
  */
 public abstract class Action {
-    
+
     protected Handler handler;
     protected String name;
     protected String permission;
-    
+
     /**
      * Single action for an handler which results in a simple command that
      * uses only plugin.command for permission.
@@ -21,7 +21,7 @@ public abstract class Action {
     protected Action(final JavaPlugin plugin, final String label) {
         this(new Handler(plugin, label), label, (String) null);
     }
-    
+
     /**
      * Multiple sub-actions for an handler which results in a complex command
      * that uses plugin.command.action permission for each action.
@@ -32,7 +32,7 @@ public abstract class Action {
     protected Action(final Handler handler, final String name) {
         this(handler, name, handler.permission + "." + name);
     }
-    
+
     /**
      * Custom permission assignment.
      * 
@@ -46,7 +46,7 @@ public abstract class Action {
         this.permission = permission;
         this.handler.actions.add(this);
     }
-    
+
     /**
      * Determines if this action is applicable to be called for the given
      * arguments based on the first argument matching the action name.
@@ -57,14 +57,14 @@ public abstract class Action {
      */
     public boolean matches(final Context context) {
         if (this.handler.actions.size() == 1) return true;
-        
+
         if (context.arguments.size() == 0) return false;
-        
+
         if (context.arguments.get(0).equalsIgnoreCase(this.name)) return true;
-        
+
         return false;
     }
-    
+
     /**
      * Performs this action.
      * 
