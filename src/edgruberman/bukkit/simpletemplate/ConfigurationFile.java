@@ -184,7 +184,7 @@ public final class ConfigurationFile {
                     return;
                 }
 
-                Main.messageManager.log("Queueing configuration file save request; Last save was " + sinceLastSave + " seconds ago; " + this.file, MessageLevel.FINEST);
+                Main.messageManager.log("Queueing configuration file save request to run in " + (this.maxSaveFrequency - sinceLastSave) + "seconds; Last save was " + sinceLastSave + " seconds ago; " + this.file, MessageLevel.FINEST);
 
                 // Schedule task to save cache to file system.
                 final ConfigurationFile that = this;

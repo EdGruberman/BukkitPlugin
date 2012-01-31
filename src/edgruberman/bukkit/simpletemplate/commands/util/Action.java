@@ -30,7 +30,7 @@ public abstract class Action {
      * @param name action name (first parameter after command label)
      */
     protected Action(final Handler handler, final String name) {
-        this(handler, name, handler.permission + "." + name);
+        this(handler, name, (String) null);
     }
 
     /**
@@ -42,8 +42,9 @@ public abstract class Action {
      */
     protected Action(final Handler handler, final String name, final String permission) {
         this.handler = handler;
-        this.name = name;
+        this.name = name.toLowerCase();
         this.permission = permission;
+        if (this.permission == null) this.permission = this.handler.permission + "." + this.name;
         this.handler.actions.add(this);
     }
 

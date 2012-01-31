@@ -9,8 +9,6 @@ import edgruberman.bukkit.simpletemplate.commands.Single;
 
 public final class Main extends JavaPlugin {
 
-    public static final String PERMISSION_PREFIX = "simpletemplate";
-
     public static MessageManager messageManager;
 
     private ConfigurationFile configurationFile;
