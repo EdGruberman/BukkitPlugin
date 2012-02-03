@@ -14,7 +14,6 @@
     <property name="doc" location="doc"/>
 
     <property name="version.properties" location="${ant.file}/../version.properties"/>
-    <property name="defaults.exists" value="false"/>
 
     <path id="classpath">
         <fileset dir="." includes="lib/**"/>
@@ -65,6 +64,7 @@
 
     <target name="-Check Defaults Exists" description="Private Dependency Task (Do not use)">
         <available file="${resources}/defaults" type="dir" property="defaults.exists"/>
+        <property name="defaults.exists" value="false"/>
         <echo message="${resources}/defaults exists = ${defaults.exists}" level="info"/>
     </target>
 

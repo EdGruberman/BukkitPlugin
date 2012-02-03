@@ -51,7 +51,7 @@ public final class ConfigurationFile {
      * Construct configuration file reference for standardized load and save
      * management.  (config.yml assumed.  Defaults assumed to be in
      * /defaults/config.yml.  No restrictions on how frequent saves can occur.)
-     * 
+     *
      * @param owner plugin that owns this configuration file
      */
     ConfigurationFile(final Plugin owner) {
@@ -62,7 +62,7 @@ public final class ConfigurationFile {
      * Construct configuration file reference for standardized load and save
      * management.  (config.yml assumed.  Defaults assumed to be in
      * /defaults/config.yml.)
-     * 
+     *
      * @param owner plugin that owns this configuration file
      * @param maxSaveFrequency shortest duration in seconds each save can occur
      */
@@ -74,7 +74,7 @@ public final class ConfigurationFile {
      * Construct configuration file reference for standardized load and save
      * management.  (Defaults assumed to be in /defaults/file.  No restrictions
      * on how frequent saves can occur.)
-     * 
+     *
      * @param owner plugin that owns this configuration file
      * @param file name of file in the default data directory
      */
@@ -85,7 +85,7 @@ public final class ConfigurationFile {
     /**
      * Construct configuration file reference for standardized load and save
      * management.  (No restrictions on how frequent saves can occur.)
-     * 
+     *
      * @param owner plugin that owns this configuration file
      * @param file name of file in the default data directory
      * @param defaults path to default configuration file supplied in JAR
@@ -97,7 +97,7 @@ public final class ConfigurationFile {
     /**
      * Construct configuration file reference for standardized load and save
      * management.
-     * 
+     *
      * @param owner plugin that owns this configuration file
      * @param file name of file in the default data directory
      * @param defaults path to default configuration file supplied in JAR
@@ -166,7 +166,7 @@ public final class ConfigurationFile {
      * be done immediately and last save was less than configured max frequency
      * then request will be cached and a scheduled task will kick off after the
      * max frequency has expired since last save.
-     * 
+     *
      * @param immediately true to force a save of the configuration file immediately
      */
     void save(final boolean immediately) {
@@ -184,7 +184,7 @@ public final class ConfigurationFile {
                     return;
                 }
 
-                Main.messageManager.log("Queueing configuration file save request to run in " + (this.maxSaveFrequency - sinceLastSave) + "seconds; Last save was " + sinceLastSave + " seconds ago; " + this.file, MessageLevel.FINEST);
+                Main.messageManager.log("Queueing configuration file save request to run in " + (this.maxSaveFrequency - sinceLastSave) + " seconds; Last save was " + sinceLastSave + " seconds ago; " + this.file, MessageLevel.FINEST);
 
                 // Schedule task to save cache to file system.
                 final ConfigurationFile that = this;
@@ -216,7 +216,7 @@ public final class ConfigurationFile {
 
     /**
      * Determine if save request is currently scheduled to execute.
-     * 
+     *
      * @return true if save request is pending; otherwise false
      */
     boolean isSaveQueued() {

@@ -8,8 +8,8 @@ public final class Multiple extends Handler {
 
     public Multiple(final JavaPlugin plugin) {
         super(plugin, "multiple");
-        this.actions.add(new MultipleReload(this));
-        this.actions.add(new MultipleStatus(this));
+        new MultipleReload(this);
+        new MultipleStatus(this);
     }
 
 }
