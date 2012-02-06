@@ -1,40 +1,40 @@
 name: SimpleTemplate
-description: Template code used for Bukkit plugins.
+description: Template code used for Bukkit plugins
 version: %VERSION%
 depend: [MessageManager]
 author: EdGruberman (ed@rjump.com)
 main: edgruberman.bukkit.simpletemplate.Main
 commands:
     single:
-        description: Does something that only needs a single simple command.
+        description: Does something that only needs a single simple command
         permission: simpletemplate.single
         usage: /<command> - Performs a simple action
     multiple:
-        description: Does something different depending upon arguments.
+        description: Does something different depending upon arguments
         permission: simpletemplate.multiple
         usage: |
-            /<command>[ status[ <Something>]] - Display status related to something.
-            /<command> detail[ <Something>] - Display detail related to something.
-            /<command> reload - Reload configuration files.
+            /<command>[ status[ <Something>]] - Display status related to something
+            /<command> detail[ <Something>] - Display detail related to something
+            /<command> reload - Reload configuration
 permissions:
     simpletemplate.single:
-        description: Can use single command.
+        description: Can use single command
         default: true
     simpletemplate.multiple:
-        description: Can use multiple command.
+        description: Can use multiple command
         default: true
     simpletemplate.multiple.info:
-        description: Can use basic information actions of multiple command.
+        description: Can use basic information actions of multiple command
         default: true
         children:
             simpletemplate.multiple.status: true
             simpletemplate.multiple.detail: true
     simpletemplate.multiple.status:
-        description: Can use status action of multiple command.
+        description: Can use status action of multiple command
         default: op
     simpletemplate.multiple.detail:
-        description: Can use detail action of multiple command.
+        description: Can use detail action of multiple command
         default: op
     simpletemplate.multiple.reload:
-        description: Can use reload action of multiple command.
+        description: Can use reload action of multiple command
         default: op
