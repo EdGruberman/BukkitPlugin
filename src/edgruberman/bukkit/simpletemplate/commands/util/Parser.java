@@ -19,9 +19,11 @@ public class Parser {
      *
      * @param context command execution context
      * @param position position of player name query in command arguments (0 based, not including leading command label)
-     * @return player with name matching query
+     * @return player with name matching query; null if no player has ever connected that matches
      */
     public static OfflinePlayer parsePlayer(final Context context, final int position) {
+        if (context.arguments.size() < (position + 1)) return null;
+
         String query = context.arguments.get(position).toLowerCase();
         boolean isExact = !query.endsWith("*"); // Trailing asterisk indicates to use first player name found beginning with characters before asterisk
         if (!isExact) query = query.substring(0, query.length() - 1); // Strip trailing asterisk

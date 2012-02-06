@@ -32,58 +32,38 @@ public class Context {
         this.label = label;
         this.arguments = parseArguments(args);
         this.action = this.parseAction();
-        Main.messageManager.log("Command Context for " + label + "; Action: " + this.action.name + "; Arguments: " + this.arguments, MessageLevel.FINEST);
-    }
-
-    /**
-     * Determines if sender is allowed to use the requested command/action.
-     * A message will be sent to the sender if they are not allowed.
-     *
-     * @return true if user is allowed; false otherwise
-     */
-    boolean isAllowed() {
-        if (!this.sender.hasPermission(this.handler.permission)) {
-            Main.messageManager.respond(this.sender, "You are not allowed to use the " + this.handler.command.getLabel() + " command.", MessageLevel.RIGHTS, false);
-            return false;
-        }
-
-        if (this.action.permission != null) {
-            if (!this.sender.hasPermission(this.action.permission)) {
-                Main.messageManager.respond(this.sender, "You are not allowed to use the " + this.action.name + " action of the " + this.handler.command.getLabel() + " command.", MessageLevel.RIGHTS, false);
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Perform requested action. Usage information will be sent if action is not performed.
-     *
-     * @return true if the action was performed as expected
-     */
-    boolean performAction() {
-        if (this.action.perform(this)) return true;
-
-        // Send usage information
-        for (String line : this.handler.command.getUsage().replace("<command>", this.label).split("\n"))
-            Main.messageManager.respond(this.sender, line, MessageLevel.NOTICE, false);
-
-        return false;
+        Main.messageManager.log("Command Context for " + label + "; Action: " + this.action.getNamePath() + "; Arguments: " + this.arguments, MessageLevel.FINEST);
     }
 
     /**
      * Identify requested action.
      *
-     * @return the requested action or the default/first action if none applies
+     * @return the most specific matching action or the default action if none applies
      */
     private Action parseAction() {
-        // Determine if a specific action directly applies
-        for (Action a : this.handler.actions)
-            if (a.matches(this)) return a;
+        Action action = this.parseAction(this.handler.actions);
+        if (action != null) return action;
 
         // Return default action (first action registered)
         return this.handler.actions.get(0);
+    }
+
+    /**
+     * Iterate any sub-actions to find most specific match.
+     *
+     * @param actions actions to check if they match
+     * @return action that matches this context; null if no actions match
+     */
+    private Action parseAction(final List<Action> actions) {
+        for (Action parent : actions)
+            if (parent.matches(this)) {
+                Action child = this.parseAction(parent.children);
+                if (child != null) return child;
+
+                return parent;
+            }
+
+        return null;
     }
 
     /**

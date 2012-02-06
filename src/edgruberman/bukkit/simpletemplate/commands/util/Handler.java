@@ -28,7 +28,7 @@ public class Handler implements CommandExecutor  {
      * @param plugin command owner
      * @param label command name
      */
-    protected Handler(final JavaPlugin plugin, final String label) {
+    public Handler(final JavaPlugin plugin, final String label) {
         this.setExecutorOf(plugin, label);
         this.permission = this.command.getPlugin().getDescription().getName().toLowerCase() + "." + this.command.getLabel();
     }
@@ -36,11 +36,16 @@ public class Handler implements CommandExecutor  {
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
         Main.messageManager.log(sender.getName() + " issued command: " + label + " " + Arrays.toString(args), MessageLevel.FINE);
-
         Context context = new Context(this, sender, label, args);
-        if (!context.isAllowed()) return true;
 
-        context.performAction();
+        if (!context.action.isAllowed(context)) return true;
+
+        if (context.action.perform(context)) return true;
+
+        // Send usage information on error
+        for (String line : context.action.handler.command.getUsage().replace("<command>", context.label).split("\n"))
+            Main.messageManager.respond(context.sender, line, MessageLevel.NOTICE, false);
+
         return true; // Always tell Bukkit this is successful as usage message errors are handled internally
     }
 
