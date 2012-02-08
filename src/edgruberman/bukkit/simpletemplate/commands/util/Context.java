@@ -44,8 +44,7 @@ public class Context {
         Action action = this.parseAction(this.handler.actions);
         if (action != null) return action;
 
-        // Return default action (first action registered)
-        return this.handler.actions.get(0);
+        return this.handler.getDefaultAction();
     }
 
     /**

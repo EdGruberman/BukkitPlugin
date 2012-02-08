@@ -29,6 +29,7 @@ public abstract class Action {
      */
     protected Action(final JavaPlugin plugin, final String label) {
         this(new Handler(plugin, label), label, (String) null);
+        this.setDefault();
     }
 
     /**
@@ -167,6 +168,13 @@ public abstract class Action {
         if (context.arguments.get(generation).equalsIgnoreCase(this.name)) return true;
 
         return false;
+    }
+
+    /**
+     * Set this action as the command handler's default action.
+     */
+    public void setDefault() {
+        this.handler.setDefaultAction(this);
     }
 
     /**

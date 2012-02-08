@@ -49,6 +49,15 @@ public class Handler implements CommandExecutor  {
         return true; // Always tell Bukkit this is successful as usage message errors are handled internally
     }
 
+    public void setDefaultAction(final Action action) {
+        this.actions.remove(action);
+        this.actions.add(0, action);
+    }
+
+    public Action getDefaultAction() {
+        return this.actions.get(0);
+    }
+
     /**
      * Registers executor for a command.
      *
