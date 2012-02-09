@@ -19,10 +19,10 @@ public class Parser {
      *
      * @param context command execution context
      * @param position position of player name query in command arguments (0 based, not including leading command label)
-     * @return player with name matching query; null if no player has ever connected that matches
+     * @return player with name matching query; null if no player has ever connected that matches or argument in position does not exist
      */
     public static OfflinePlayer parsePlayer(final Context context, final int position) {
-        if (context.arguments.size() < (position + 1)) return null;
+        if (position < 0 || context.arguments.size() <= position) return null;
 
         String query = context.arguments.get(position).toLowerCase();
         boolean isExact = !query.endsWith("*"); // Trailing asterisk indicates to use first player name found beginning with characters before asterisk
@@ -51,7 +51,7 @@ public class Parser {
      * @return list of each number that was delimited by a comma; null if argument does not exist, or no numbers specified
      */
     public static List<Long> parseLongList(final Context context, final int position) {
-        if (context.arguments.size() <= position) return null;
+        if (position < 0 || context.arguments.size() <= position) return null;
 
         List<Long> values = new ArrayList<Long>();
         for (String s : context.arguments.get(position).split(","))
@@ -90,6 +90,31 @@ public class Parser {
         sb.delete(sb.length() - delim.length(), sb.length());
 
         return sb.toString();
+    }
+
+    /**
+     * Verifies if argument can be converted to an integer and returns it if so.
+     *
+     * @param context command execution context
+     * @param position position of player name query in command arguments (0 based, not including leading command label)
+     * @return integer value or null if position does not exist or argument can not be converted
+     */
+    public static Integer getInteger(final Context context, final int position) {
+        if (position < 0 || context.arguments.size() <= position) return null;
+
+        if (!Parser.isInteger(context.arguments.get(position))) return null;
+
+        return Integer.parseInt(context.arguments.get(position));
+    }
+
+    public static boolean isInteger(final String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        }
+        catch(Exception e) {
+            return false;
+        }
     }
 
 }
