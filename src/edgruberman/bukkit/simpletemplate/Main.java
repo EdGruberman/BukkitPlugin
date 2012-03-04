@@ -16,7 +16,6 @@ public final class Main extends JavaPlugin {
     @Override
     public void onLoad() {
         Main.messageManager = new MessageManager(this);
-        Main.messageManager.log("Version " + this.getDescription().getVersion());
         this.configurationFile = new ConfigurationFile(this);
     }
 
@@ -26,18 +25,16 @@ public final class Main extends JavaPlugin {
 
         new Single(this);
         new Multiple(this);
-
-        Main.messageManager.log("Plugin Enabled");
     }
 
     @Override
     public void onDisable() {
         if (this.configurationFile.isSaveQueued()) this.configurationFile.save();
-        Main.messageManager.log("Plugin Disabled");
     }
 
     public void loadConfiguration() {
         @SuppressWarnings("unused")
+        final
         FileConfiguration config = this.configurationFile.load();
     }
 
