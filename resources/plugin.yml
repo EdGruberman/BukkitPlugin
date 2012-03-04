@@ -1,8 +1,8 @@
-name: SimpleTemplate
+name: @NAME@
 description: Template code used for Bukkit plugins
-version: %VERSION%
 depend: [MessageManager]
-author: EdGruberman (ed@rjump.com)
+version: @VERSION@
+author: @AUTHOR@
 main: edgruberman.bukkit.simpletemplate.Main
 commands:
     single:
