@@ -8,7 +8,7 @@
 
     <property name="version.properties" location="${ant.file}/../version.properties" />
     <property file="${ant.file}/../plugin.properties" prefix="plugin" />
-    
+
     <path id="classpath">
         <fileset dir="." includes="lib/**" />
         <fileset dir="${bukkit.shared}" includes="**" />
@@ -86,9 +86,9 @@
 
         <copy file="${resources}/plugin.yml" tofile="${stage}/jar/plugin.yml" />
         <replace file="${stage}/jar/plugin.yml">
-        	<replacefilter token="@NAME@" value="${plugin.name}" />
-        	<replacefilter token="@VERSION@" value="${version}" />
-        	<replacefilter token="@AUTHOR@" value="${bukkit.author}" />
+            <replacefilter token="@NAME@" value="${plugin.name}" />
+            <replacefilter token="@VERSION@" value="${version}" />
+            <replacefilter token="@AUTHOR@" value="${bukkit.author}" />
         </replace>
 
         <mkdir dir="${stage}/jar" />
