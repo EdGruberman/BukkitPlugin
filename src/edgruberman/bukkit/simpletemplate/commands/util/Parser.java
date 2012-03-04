@@ -1,7 +1,10 @@
 package edgruberman.bukkit.simpletemplate.commands.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -115,6 +118,68 @@ public class Parser {
         catch(Exception e) {
             return false;
         }
+    }
+
+    /**
+     * Verifies if argument can be converted to an double and returns it if so.
+     *
+     * @param context command execution context
+     * @param position position of player name query in command arguments (0 based, not including leading command label)
+     * @return double value or null if position does not exist or argument can not be converted
+     */
+    public static Double getDouble(final Context context, final int position) {
+        if (position < 0 || context.arguments.size() <= position) return null;
+
+        if (!Parser.isDouble(context.arguments.get(position))) return null;
+
+        return Double.parseDouble(context.arguments.get(position));
+    }
+
+    public static boolean isDouble(final String s) {
+        try {
+            Double.parseDouble(s);
+            return true;
+        }
+        catch(Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Parse an ISO8601 formatted date/time string.
+     *
+     * @param text string representation of date/time
+     * @return parsed date/time value
+     */
+    public static Date parseDate(final Context context, final int position) {
+        if (position < 0 || context.arguments.size() <= position) return null;
+
+        return Parser.parseDate(context, position, "yyyy-MM-dd'T'HH:mm:ssz");
+    }
+
+    /**
+     * Parse a date/time formatted string.
+     *
+     * @param text string representation of date/time
+     * @param pattern pattern for date/time text is formatted as
+     * @return parsed date/time value
+     */
+    public static Date parseDate(final Context context, final int position, final String pattern) {
+        if (position < 0 || context.arguments.size() <= position) return null;
+
+        Date date = null;
+        try {
+            date = (new SimpleDateFormat(pattern)).parse(context.arguments.get(position));
+        } catch (ParseException e) {
+            // ignore to return null
+        }
+        return date;
+    }
+
+    public static String parseString(final Context context, final int position) {
+        if (position < 0 || context.arguments.size() <= position) return null;
+
+        return context.arguments.get(position);
     }
 
 }

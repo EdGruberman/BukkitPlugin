@@ -4,20 +4,22 @@
     <property name="implementation-name" value="edgruberman/bukkit/simpletemplate/"/>
     <property name="manifest-classpath" value=""/>
 
-    <property name="test" location="D:/Documents/Personal/Games/Minecraft/Hardcore/Server/plugins"/>
     <property name="author" value="EdGruberman (ed@rjump.com)"/>
+    <property name="test" location="D:/Documents/Personal/Games/Minecraft/Hardcore/Server/plugins"/>
+	<property name="shared" location="../../Shared"/>
 
     <property name="src" location="src"/>
     <property name="resources" location="resources"/>
     <property name="stage" location="stage"/>
     <property name="dist" location="dist"/>
     <property name="doc" location="doc"/>
+	<property name="lib" value="lib"/>
 
     <property name="version.properties" location="${ant.file}/../version.properties"/>
 
     <path id="classpath">
-        <fileset dir="." includes="lib/**"/>
-        <fileset dir="../Shared/lib" includes="**"/>
+        <fileset dir="." includes="${lib}/**"/>
+        <fileset dir="${shared}" includes="**"/>
     </path>
 
     <target name="Test (Build and Copy)" description="Build existing version and copy JAR to test server">
