@@ -190,8 +190,7 @@ public final class ConfigurationFile {
                 final ConfigurationFile that = this;
                 this.taskSave = this.owner.getServer().getScheduler().scheduleSyncDelayedTask(
                           this.owner
-                        , new Runnable() { @Override
-                        public void run() { that.save(true); } }
+                        , new Runnable() { @Override public void run() { that.save(true); } }
                         , (this.maxSaveFrequency - sinceLastSave) * ConfigurationFile.TICKS_PER_SECOND
                 );
 
