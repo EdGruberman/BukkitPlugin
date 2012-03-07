@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <project default="Test (Build and Copy)" basedir="..">
+    
     <property name="src" location="src" />
     <property name="resources" location="resources" />
     <property name="stage" location="stage" />
@@ -82,12 +83,10 @@
 
     <target name="JAR Export" description="Create standard plugin file" depends="-Get Version">
         <echo message="Exporting JAR for version ${version}" />
-        
+
         <delete dir="${stage}" />
-        <delete dir="${dist}" />
-        
         <mkdir dir="${stage}/jar" />
-        
+
         <copy todir="${stage}/jar" preservelastmodified="true">
             <fileset dir="${resources}" />
             <filterset>
@@ -113,6 +112,7 @@
             </section>
         </manifest>
 
+        <delete dir="${dist}" />
         <mkdir dir="${dist}" />
         <jar basedir="${stage}/jar/" jarfile="${dist}/${plugin.name}.jar" manifest="${stage}/MANIFEST.MF" />
     </target>
@@ -126,7 +126,7 @@
         <property file="${version.properties}" prefix="version" />
         <property name="version" value="${version.major}.${version.minor}.${version.revision}${version.type}${version.build}" />
     </target>
-    
+
     <target name="-Existing Version" description="Generates console output with version">
         <property file="${version.properties}" prefix="existing" />
         <property name="existing" value="${existing.major}.${existing.minor}.${existing.revision}${existing.type}${existing.build}" />
