@@ -88,12 +88,16 @@
         <mkdir dir="${stage}/jar" />
 
         <copy todir="${stage}/jar" preservelastmodified="true">
-            <fileset dir="${resources}" />
+            <fileset dir="${resources}" includes="**/*.yml"/>
             <filterset>
                 <filter token="NAME" value="${plugin.name}" />
                 <filter token="VERSION" value="${version}" />
                 <filter token="AUTHOR" value="${bukkit.author}" />
             </filterset>
+        </copy>
+        
+        <copy todir="${stage}/jar" preservelastmodified="true">
+            <fileset dir="${resources}" excludes="**/*.yml"/>
         </copy>
 
         <javac srcdir="${src}" destdir="${stage}/jar" encoding="utf-8" debug="true" includeantruntime="false">
