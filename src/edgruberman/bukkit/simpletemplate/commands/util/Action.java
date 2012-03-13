@@ -168,13 +168,18 @@ public abstract class Action {
     public boolean matches(final Context context)  {
         if (this.handler.actions.size() == 1) return true;
 
-        int generation = this.getGeneration();
+        final int generation = this.getGeneration();
 
         if (context.arguments.size() <= generation) return false;
 
         if (context.arguments.get(generation).equalsIgnoreCase(this.name)) return true;
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Action [handler=" + this.handler + ", getNamePath()=" + this.getNamePath() + "]";
     }
 
     /**
