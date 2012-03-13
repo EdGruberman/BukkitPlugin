@@ -78,7 +78,7 @@ public final class ConfigurationFile {
      * @param maxSaveFrequency shortest duration in seconds each save can occur
      */
     ConfigurationFile(final Plugin owner, final int maxSaveFrequency) {
-        this(owner, null, null, null, maxSaveFrequency);
+        this(owner, (String) null, (String) null, (String) null, maxSaveFrequency);
     }
 
     /**
