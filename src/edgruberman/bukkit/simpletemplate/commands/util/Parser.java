@@ -28,11 +28,11 @@ public class Parser {
         if (position < 0 || context.arguments.size() <= position) return null;
 
         String query = context.arguments.get(position).toLowerCase();
-        boolean isExact = !query.endsWith("*"); // Trailing asterisk indicates to use first player name found beginning with characters before asterisk
+        final boolean isExact = !query.endsWith("*"); // Trailing asterisk indicates to use first player name found beginning with characters before asterisk
         if (!isExact) query = query.substring(0, query.length() - 1); // Strip trailing asterisk
 
-        for (OfflinePlayer op : Bukkit.getServer().getOfflinePlayers()) {
-            String name = (op.getPlayer() != null ? op.getPlayer().getName() : op.getName()).toLowerCase();
+        for (final OfflinePlayer op : Bukkit.getServer().getOfflinePlayers()) {
+            final String name = (op.getPlayer() != null ? op.getPlayer().getName() : op.getName()).toLowerCase();
             if (isExact) {
                 if (name.equals(query)) return op;
 
@@ -56,11 +56,11 @@ public class Parser {
     public static List<Long> parseLongList(final Context context, final int position) {
         if (position < 0 || context.arguments.size() <= position) return null;
 
-        List<Long> values = new ArrayList<Long>();
-        for (String s : context.arguments.get(position).split(","))
+        final List<Long> values = new ArrayList<Long>();
+        for (final String s : context.arguments.get(position).split(","))
             try {
                 values.add(Long.parseLong(s));
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 continue;
             }
         if (values.size() == 0) return null;
@@ -88,8 +88,8 @@ public class Parser {
     public static String join(final Collection<? extends String> col, final String delim) {
         if (col == null || col.isEmpty()) return "";
 
-        StringBuilder sb = new StringBuilder();
-        for (String s : col) sb.append(s + delim);
+        final StringBuilder sb = new StringBuilder();
+        for (final String s : col) sb.append(s + delim);
         sb.delete(sb.length() - delim.length(), sb.length());
 
         return sb.toString();
@@ -115,7 +115,7 @@ public class Parser {
             Integer.parseInt(s);
             return true;
         }
-        catch(Exception e) {
+        catch(final Exception e) {
             return false;
         }
     }
@@ -140,7 +140,7 @@ public class Parser {
             Double.parseDouble(s);
             return true;
         }
-        catch(Exception e) {
+        catch(final Exception e) {
             return false;
         }
     }
@@ -170,7 +170,7 @@ public class Parser {
         Date date = null;
         try {
             date = (new SimpleDateFormat(pattern)).parse(context.arguments.get(position));
-        } catch (ParseException e) {
+        } catch (final ParseException e) {
             // ignore to return null
         }
         return date;
