@@ -1,8 +1,11 @@
 package edgruberman.bukkit.simpletemplate;
 
+import java.util.logging.Level;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import edgruberman.bukkit.messagemanager.MessageLevel;
 import edgruberman.bukkit.messagemanager.MessageManager;
 import edgruberman.bukkit.simpletemplate.commands.Multiple;
 import edgruberman.bukkit.simpletemplate.commands.Single;
@@ -12,16 +15,20 @@ public final class Main extends JavaPlugin {
     public static MessageManager messageManager;
 
     private ConfigurationFile configurationFile;
+    private boolean firstEnable = true;
 
     @Override
     public void onLoad() {
-        Main.messageManager = new MessageManager(this);
         this.configurationFile = new ConfigurationFile(this);
+        this.configurationFile.load();
+        this.setLoggingLevel();
+        Main.messageManager = new MessageManager(this);
     }
 
     @Override
     public void onEnable() {
         this.loadConfiguration();
+        this.firstEnable = false;
 
         new Single(this);
         new Multiple(this);
@@ -33,9 +40,16 @@ public final class Main extends JavaPlugin {
     }
 
     public void loadConfiguration() {
+        if (!this.firstEnable) this.configurationFile.load();
         @SuppressWarnings("unused")
-        final
-        FileConfiguration config = this.configurationFile.load();
+        final FileConfiguration config = this.configurationFile.getConfig();
+    }
+
+    private void setLoggingLevel() {
+        final String name = this.configurationFile.getConfig().getString("logLevel", "INFO");
+        Level level = MessageLevel.parse(name);
+        if (level == null) level = Level.INFO;
+        this.getServer().getLogger().setLevel(level);
     }
 
 }
