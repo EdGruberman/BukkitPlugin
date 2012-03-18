@@ -32,9 +32,15 @@ permissions:
     simpletemplate.multiple.status:
         description: Can use status action of multiple command
         default: op
+        children:
+            simpletemplate.multiple: true
     simpletemplate.multiple.detail:
         description: Can use detail action of multiple command
         default: op
+        children:
+            simpletemplate.multiple: true
     simpletemplate.multiple.reload:
         description: Can use reload action of multiple command
         default: op
+        children:
+            simpletemplate.multiple: true
