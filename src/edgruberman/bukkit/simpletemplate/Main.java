@@ -25,6 +25,13 @@ public final class Main extends JavaPlugin {
         Main.messageManager = new MessageManager(this);
     }
 
+    private void setLoggingLevel() {
+        final String name = this.configurationFile.getConfig().getString("logLevel", "INFO");
+        Level level = MessageLevel.parse(name);
+        if (level == null) level = Level.INFO;
+        this.getLogger().setLevel(level);
+    }
+
     @Override
     public void onEnable() {
         this.loadConfiguration();
@@ -43,13 +50,6 @@ public final class Main extends JavaPlugin {
         if (!this.firstEnable) this.configurationFile.load();
         @SuppressWarnings("unused")
         final FileConfiguration config = this.configurationFile.getConfig();
-    }
-
-    private void setLoggingLevel() {
-        final String name = this.configurationFile.getConfig().getString("logLevel", "INFO");
-        Level level = MessageLevel.parse(name);
-        if (level == null) level = Level.INFO;
-        this.getServer().getLogger().setLevel(level);
     }
 
 }
