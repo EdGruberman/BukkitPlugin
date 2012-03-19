@@ -52,7 +52,7 @@ public final class ConfigurationFile {
     private final String defaults;
     private int maxSaveFrequency;
     private FileVersion minVersion;
-    private FileConfiguration config = null;
+    private YamlConfiguration config = null;
     private Long lastSaveAttempt = null;
     private Integer taskSave = null;
 
@@ -175,11 +175,11 @@ public final class ConfigurationFile {
         }
 
         // No file, no defaults, reset to empty configuration
-        this.config = new YamlConfiguration();
+        this.clear();
         return this.config;
     }
 
-    public FileConfiguration getConfig() {
+    public YamlConfiguration getConfig() {
         if (this.config == null) this.load();
         return this.config;
     }
@@ -243,6 +243,10 @@ public final class ConfigurationFile {
         this.taskSave = null;
 
         this.owner.getLogger().log(Level.FINEST, "Saved configuration file: " + this.file);
+    }
+
+    public void clear() {
+        this.config = new YamlConfiguration();
     }
 
     /**
