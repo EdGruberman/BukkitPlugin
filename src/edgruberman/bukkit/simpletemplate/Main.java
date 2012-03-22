@@ -30,6 +30,7 @@ public final class Main extends JavaPlugin {
         Level level = MessageLevel.parse(name);
         if (level == null) level = Level.INFO;
         this.getLogger().setLevel(level);
+        this.getLogger().log(Level.CONFIG, "Logging level set to: " + level.getName());
     }
 
     @Override
