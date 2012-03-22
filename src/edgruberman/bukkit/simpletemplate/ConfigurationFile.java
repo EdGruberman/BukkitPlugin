@@ -122,6 +122,9 @@ public final class ConfigurationFile {
         this.maxSaveFrequency = (maxSaveFrequency != null ? maxSaveFrequency : ConfigurationFile.DEFAULT_SAVE);
     }
 
+    public File getFile() {
+        return this.file;
+    }
 
     public int getMaxSaveFrequency() {
         return this.maxSaveFrequency;
