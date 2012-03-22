@@ -1,5 +1,6 @@
 package edgruberman.bukkit.simpletemplate;
 
+import java.util.logging.Handler;
 import java.util.logging.Level;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -29,8 +30,13 @@ public final class Main extends JavaPlugin {
         final String name = this.configurationFile.getConfig().getString("logLevel", "INFO");
         Level level = MessageLevel.parse(name);
         if (level == null) level = Level.INFO;
+
+        // Only set the parent handler lower if necessary, otherwise leave it alone for other configurations that have set it.
+        for (final Handler h : this.getLogger().getParent().getHandlers())
+            if (h.getLevel().intValue() > level.intValue()) h.setLevel(level);
+
         this.getLogger().setLevel(level);
-        this.getLogger().log(Level.CONFIG, "Logging level set to: " + level.getName());
+        this.getLogger().log(Level.CONFIG, "Logging level set to: " + this.getLogger().getLevel());
     }
 
     @Override
