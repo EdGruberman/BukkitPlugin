@@ -36,11 +36,6 @@ public final class Main extends JavaPlugin {
         if (this.configurationFile.isSaveQueued()) this.configurationFile.save();
     }
 
-    public void configure() {
-        @SuppressWarnings("unused")
-        final FileConfiguration config = this.configurationFile.getConfig();
-    }
-
     private void setLoggingLevel() {
         final String name = this.configurationFile.getConfig().getString("logLevel", "INFO");
         Level level = MessageLevel.parse(name);
@@ -53,5 +48,11 @@ public final class Main extends JavaPlugin {
         this.getLogger().setLevel(level);
         this.getLogger().log(Level.CONFIG, "Logging level set to: " + this.getLogger().getLevel());
     }
+
+    public void configure() {
+        @SuppressWarnings("unused")
+        final FileConfiguration config = this.configurationFile.getConfig();
+    }
+
 
 }
