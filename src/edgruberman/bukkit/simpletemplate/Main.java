@@ -16,14 +16,29 @@ public final class Main extends JavaPlugin {
     public static MessageManager messageManager;
 
     private ConfigurationFile configurationFile;
-    private boolean firstEnable = true;
 
     @Override
-    public void onLoad() {
+    public void onEnable() {
         this.configurationFile = new ConfigurationFile(this);
         this.configurationFile.load();
         this.setLoggingLevel();
+
         Main.messageManager = new MessageManager(this);
+
+        this.configure();
+
+        new Single(this);
+        new Multiple(this);
+    }
+
+    @Override
+    public void onDisable() {
+        if (this.configurationFile.isSaveQueued()) this.configurationFile.save();
+    }
+
+    public void configure() {
+        @SuppressWarnings("unused")
+        final FileConfiguration config = this.configurationFile.getConfig();
     }
 
     private void setLoggingLevel() {
@@ -37,26 +52,6 @@ public final class Main extends JavaPlugin {
 
         this.getLogger().setLevel(level);
         this.getLogger().log(Level.CONFIG, "Logging level set to: " + this.getLogger().getLevel());
-    }
-
-    @Override
-    public void onEnable() {
-        this.loadConfiguration();
-        this.firstEnable = false;
-
-        new Single(this);
-        new Multiple(this);
-    }
-
-    @Override
-    public void onDisable() {
-        if (this.configurationFile.isSaveQueued()) this.configurationFile.save();
-    }
-
-    public void loadConfiguration() {
-        if (!this.firstEnable) this.configurationFile.load();
-        @SuppressWarnings("unused")
-        final FileConfiguration config = this.configurationFile.getConfig();
     }
 
 }
