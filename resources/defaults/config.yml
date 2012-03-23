@@ -1,1 +1,2 @@
 logLevel: INFO
+version: @VERSION@

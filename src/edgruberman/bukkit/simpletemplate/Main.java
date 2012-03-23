@@ -13,6 +13,8 @@ import edgruberman.bukkit.simpletemplate.commands.Single;
 
 public final class Main extends JavaPlugin {
 
+    private static final String MINIMUM_VERSION_CONFIG = "0.0.0a0";
+
     public static MessageManager messageManager;
 
     private ConfigurationFile configurationFile;
@@ -20,6 +22,7 @@ public final class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         this.configurationFile = new ConfigurationFile(this);
+        this.configurationFile.setMinVersion(Main.MINIMUM_VERSION_CONFIG);
         this.configurationFile.load();
         this.setLoggingLevel();
 
