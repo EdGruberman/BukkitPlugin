@@ -6,10 +6,10 @@ import java.util.logging.Level;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import edgruberman.bukkit.messagemanager.MessageLevel;
 import edgruberman.bukkit.messagemanager.MessageManager;
 import edgruberman.bukkit.simpletemplate.commands.Multiple;
 import edgruberman.bukkit.simpletemplate.commands.Single;
+import edgruberman.bukkit.simpletemplate.dependencies.DependencyChecker;
 
 public final class Main extends JavaPlugin {
 
@@ -18,6 +18,11 @@ public final class Main extends JavaPlugin {
     public static MessageManager messageManager;
 
     private ConfigurationFile configurationFile;
+
+    @Override
+    public void onLoad() {
+        new DependencyChecker(this);
+    }
 
     @Override
     public void onEnable() {
@@ -41,8 +46,11 @@ public final class Main extends JavaPlugin {
 
     private void setLoggingLevel() {
         final String name = this.configurationFile.getConfig().getString("logLevel", "INFO");
-        Level level = MessageLevel.parse(name);
-        if (level == null) level = Level.INFO;
+        Level level;
+        try { level = Level.parse(name); } catch (final Exception e) {
+            level = Level.INFO;
+            this.getLogger().warning("Unrecognized java.util.logging.Level in \"" + this.configurationFile.getFile().getPath() + "\"; logLevel: " + name);
+        }
 
         // Only set the parent handler lower if necessary, otherwise leave it alone for other configurations that have set it.
         for (final Handler h : this.getLogger().getParent().getHandlers())
