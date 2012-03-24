@@ -41,7 +41,7 @@ public final class DependencyChecker {
 
             // Conflict
             if (!plugin.getDescription().getMain().equals(minimum.main))
-                throw new IllegalStateException("Dependency Failure; Plugin conflict: " + plugin.getName() + "; " + plugin.getDescription().getMain() + " does not match required " + minimum.main);
+                throw new IllegalStateException("Dependency Failure; Plugin name conflict: " + plugin.getName() + "; " + plugin.getDescription().getMain() + " does not match required " + minimum.main);
 
             final Version existing = new Version(plugin.getDescription().getVersion());
             if (existing.compareTo(minimum.version) >= 0) continue;
