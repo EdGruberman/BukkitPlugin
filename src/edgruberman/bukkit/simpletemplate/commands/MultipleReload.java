@@ -1,7 +1,7 @@
 package edgruberman.bukkit.simpletemplate.commands;
 
 import edgruberman.bukkit.messagemanager.MessageLevel;
-import edgruberman.bukkit.simpletemplate.Main;
+import edgruberman.bukkit.simpletemplate.Message;
 import edgruberman.bukkit.simpletemplate.commands.util.Action;
 import edgruberman.bukkit.simpletemplate.commands.util.Context;
 import edgruberman.bukkit.simpletemplate.commands.util.Handler;
@@ -16,7 +16,7 @@ final class MultipleReload extends Action {
     public boolean perform(final Context context) {
         context.handler.command.getPlugin().onDisable();
         context.handler.command.getPlugin().onEnable();
-        Main.messageManager.send(context.sender, "Configuration reloaded", MessageLevel.STATUS, false);
+        Message.manager.send(context.sender, "Configuration reloaded", MessageLevel.STATUS, false);
         return true;
     }
 

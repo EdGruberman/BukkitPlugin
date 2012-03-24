@@ -6,7 +6,6 @@ import java.util.logging.Level;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import edgruberman.bukkit.messagemanager.MessageManager;
 import edgruberman.bukkit.simpletemplate.commands.Multiple;
 import edgruberman.bukkit.simpletemplate.commands.Single;
 import edgruberman.bukkit.simpletemplate.dependencies.DependencyChecker;
@@ -14,9 +13,6 @@ import edgruberman.bukkit.simpletemplate.dependencies.DependencyChecker;
 public final class Main extends JavaPlugin {
 
     private static final String MINIMUM_VERSION_CONFIG = "0.0.0a0";
-
-    public static MessageManager messageManager;
-
     private ConfigurationFile configurationFile;
 
     @Override
@@ -31,7 +27,7 @@ public final class Main extends JavaPlugin {
         this.configurationFile.load();
         this.setLoggingLevel();
 
-        Main.messageManager = new MessageManager(this);
+        new Message(this);
 
         this.configure();
 
