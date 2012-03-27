@@ -3,7 +3,7 @@ description: Template code used for Bukkit plugins
 depend: [MessageManager]
 version: @VERSION@
 author: @AUTHOR@
-main: edgruberman.bukkit.simpletemplate.Main
+main: @MAIN@
 commands:
     single:
         description: Does something that only needs a single simple command
