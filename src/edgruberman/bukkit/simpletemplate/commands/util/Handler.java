@@ -12,7 +12,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import edgruberman.bukkit.messagemanager.MessageLevel;
-import edgruberman.bukkit.simpletemplate.Message;
 
 /**
  * Command execution manager
@@ -45,7 +44,7 @@ public class Handler implements CommandExecutor  {
 
         // Send usage information on error
         for (final String line : context.action.handler.command.getUsage().replace("<command>", context.label).split("\n"))
-            Message.manager.send(context.sender, line, MessageLevel.NOTICE, false);
+            context.respond(line, MessageLevel.NOTICE);
 
         return true; // Always tell Bukkit this is successful as usage message errors are handled internally
     }
