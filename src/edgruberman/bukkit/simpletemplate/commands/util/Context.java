@@ -6,6 +6,9 @@ import java.util.logging.Level;
 
 import org.bukkit.command.CommandSender;
 
+import edgruberman.bukkit.messagemanager.MessageLevel;
+import edgruberman.bukkit.messagemanager.MessageManager;
+
 /**
  * Individual command execution request
  */
@@ -31,6 +34,19 @@ public class Context {
         this.arguments = Context.parseArguments(args);
         this.action = this.parseAction();
         this.handler.command.getPlugin().getLogger().log(Level.FINEST, "Command issued: " + this.toString());
+    }
+
+    public void respond(final String message, final MessageLevel level) {
+        this.respond(message, level, false);
+    }
+
+    public void respond(final String message, final MessageLevel level, final boolean applyTimestamp) {
+        MessageManager.of(this.handler.command.getPlugin()).tell(this.sender, message, level, applyTimestamp);
+    }
+
+    @Override
+    public String toString() {
+        return "Context [handler=" + this.handler + ", sender=" + this.sender.getName() + ", label=" + this.label + ", arguments=" + this.arguments + ", action=" + this.action + "]";
     }
 
     /**
@@ -61,11 +77,6 @@ public class Context {
             }
 
         return null;
-    }
-
-    @Override
-    public String toString() {
-        return "Context [handler=" + this.handler + ", sender=" + this.sender.getName() + ", label=" + this.label + ", arguments=" + this.arguments + ", action=" + this.action + "]";
     }
 
     /**
