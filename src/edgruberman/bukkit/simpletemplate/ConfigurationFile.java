@@ -267,7 +267,7 @@ public final class ConfigurationFile {
         Level level;
         try { level = Level.parse(name); } catch (final Exception e) {
             level = Level.INFO;
-            this.owner.getLogger().warning("Unrecognized java.util.logging.Level in \"" + this.getFile().getPath() + "\"; logLevel: " + name);
+            this.owner.getLogger().warning("Defaulting to " + level.getName() + "; Unrecognized java.util.logging.Level: " + name);
         }
 
         // Only set the parent handler lower if necessary, otherwise leave it alone for other configurations that have set it.
@@ -275,7 +275,7 @@ public final class ConfigurationFile {
             if (h.getLevel().intValue() > level.intValue()) h.setLevel(level);
 
         this.owner.getLogger().setLevel(level);
-        this.owner.getLogger().log(Level.CONFIG, "Logging level set to: " + this.owner.getLogger().getLevel());
+        this.owner.getLogger().config("Logging level set to: " + this.owner.getLogger().getLevel());
     }
 
     public FileVersion getVersion() {
