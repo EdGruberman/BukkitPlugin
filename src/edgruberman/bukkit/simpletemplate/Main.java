@@ -15,9 +15,9 @@ import java.util.logging.Level;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import edgruberman.bukkit.messaging.couriers.ConfigurationCourier;
-import edgruberman.bukkit.messaging.couriers.TimestampedConfigurationCourier;
 import edgruberman.bukkit.simpletemplate.commands.Reload;
+import edgruberman.bukkit.simpletemplate.messaging.couriers.ConfigurationCourier;
+import edgruberman.bukkit.simpletemplate.messaging.couriers.TimestampedConfigurationCourier;
 
 public final class Main extends JavaPlugin {
 
