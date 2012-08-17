@@ -1,7 +1,7 @@
 logLevel: INFO
 messages:
-    requiresPlayer: '-> Command %2$s cancelled when §cnot in-game player' # 2 = Command Label
-    requiresArgument: '-> Required §cargument missing§r: %2$s' # 2 = Argument Name
-    unknownArgument: '-> §cUnable to determine %2$s§r: %3$s' # 2 = Argument Name, 3 = Argument Value
+    requiresPlayer: '-> §cOnly in-game players§r can use the {1} command' # 1 = Command Label
+    requiresArgument: '-> Required §cargument missing§r: {1}' # 1 = Argument Name
+    unknownArgument: '-> §cUnable to determine§r §o{1}§r: {2}' # 1 = Argument Name, 2 = Argument Value
     reload: '-> %2$s plugin §2reloaded' # 2 = Plugin Name
 version: @VERSION@

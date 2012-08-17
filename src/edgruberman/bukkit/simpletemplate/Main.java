@@ -19,19 +19,19 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import edgruberman.bukkit.simpletemplate.commands.Reload;
-import edgruberman.bukkit.simpletemplate.messaging.couriers.ConfigurationCourier;
-import edgruberman.bukkit.simpletemplate.messaging.couriers.TimestampedConfigurationCourier;
+import edgruberman.bukkit.simpletemplate.messaging.ConfigurationCourier;
+import edgruberman.bukkit.simpletemplate.messaging.Courier;
 
 public final class Main extends JavaPlugin {
 
     private static final Version MINIMUM_CONFIGURATION = new Version("0.0.0a0");
 
-    public static ConfigurationCourier courier;
+    public static Courier courier;
 
     @Override
     public void onEnable() {
         this.reloadConfig();
-        Main.courier = new TimestampedConfigurationCourier(this);
+        Main.courier = new ConfigurationCourier(this);
 
         // TODO Instantiate Objects
 
@@ -92,12 +92,12 @@ public final class Main extends JavaPlugin {
             out.close(); in.close();
 
         } catch (final Exception e) {
-            throw new IllegalArgumentException("Could not extract configuration file \"" + resource + "\" to " + config.getPath() + "\";" + e.getClass().getName() + ": " + e.getMessage());
+            throw new IllegalArgumentException("Could not extract configuration file \"" + resource + "\" to " + config.getPath() + "\";" + e);
         }
     }
 
     private void archiveConfig(final String resource, final Version version) {
-        final String backupName = "{0} - Archive version {1} - {2,date,yyyyMMdd}{2,time,HHmmss}.yml";
+        final String backupName = "{0} - Archive version {1} - {2,date,yyyyMMddHHmmss}.yml";
         final File backup = new File(this.getDataFolder(), MessageFormat.format(backupName, resource.replaceAll("(?i)\\.yml$", ""), version, new Date()));
         final File existing = new File(this.getDataFolder(), resource);
 
