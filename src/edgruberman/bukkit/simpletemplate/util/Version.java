@@ -1,4 +1,4 @@
-package edgruberman.bukkit.simpletemplate;
+package edgruberman.bukkit.simpletemplate.util;
 
 
 import java.util.ArrayList;
