@@ -46,6 +46,10 @@ public class CustomPlugin extends JavaPlugin {
         this.extractConfig(CustomPlugin.CONFIGURATION_FILE, false);
     }
 
+    public Configuration loadConfig(final String resource) {
+        return this.loadConfig(resource, this.configurationMinimums.get(resource));
+    }
+
     public Configuration loadConfig(final String resource, final Version required) {
         // extract default if not existing
         this.extractConfig(resource, false);
