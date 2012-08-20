@@ -3,5 +3,5 @@ messages:
     requiresPlayer: '-> §cOnly in-game players§r can use the {1} command' # 1 = Command Label
     requiresArgument: '-> Required §cargument missing§r: {1}' # 1 = Argument Name
     unknownArgument: '-> §cUnable to determine§r §o{1}§r: {2}' # 1 = Argument Name, 2 = Argument Value
-    reload: '-> %2$s plugin §2reloaded' # 2 = Plugin Name
+    reload: '-> {1} plugin §2reloaded' # 1 = Plugin Name
 version: @VERSION@
