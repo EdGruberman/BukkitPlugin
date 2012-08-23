@@ -14,7 +14,7 @@ commands:
         permission: simpletemplate.reload
         usage: /<command>
 permissions:
-    simpletemplate.info:
+    simpletemplate.user:
         description: Can use basic information commands
         default: true
         children:
@@ -23,5 +23,5 @@ permissions:
         description: Can use all commands
         default: op
         children:
-            simpletemplate.info: true
+            simpletemplate.user: true
             simpletempate.reload: true
