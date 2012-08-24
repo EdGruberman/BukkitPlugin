@@ -70,7 +70,7 @@ public final class Version implements Comparable<Version> {
         public static final Type ALPHA = new Type("a", 0);
         public static final Type BETA = new Type("b", 1);
         public static final Type CANDIDATE = new Type("rc", 2);
-        public static final Type PRODUCTION = new Type("", 3);
+        public static final Type RELEASE = new Type("", 3);
 
         public static Type parse(final String designator) {
             for (final Type type : Type.known)
