@@ -20,6 +20,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * @author EdGruberman (ed@rjump.com)
+ * @version 1.0.1
+ */
 public class CustomPlugin extends JavaPlugin {
 
     public static final Charset CONFIGURATION_SOURCE = Charset.forName("UTF-8");
