@@ -95,7 +95,6 @@
                 <filter token="VERSION" value="${version}" />
                 <filter token="VERSION.TARGET" value="${version.target}" />
                 <filter token="AUTHOR" value="${bukkit.author}" />
-                <filter token="MAIN" value="${plugin.main}" />
             </filterset>
         </copy>
         

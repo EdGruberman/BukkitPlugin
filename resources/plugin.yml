@@ -2,7 +2,8 @@ name: @NAME@
 description: Template code used for Bukkit plugins
 version: @VERSION@
 author: @AUTHOR@
-main: @MAIN@
+website: http://www.rjump.com
+main: edgruberman.bukkit.simpletemplate.Main
 commands:
     'simpletemplate:command.action':
         aliases: [action, command.action]
