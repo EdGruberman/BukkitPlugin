@@ -2,7 +2,7 @@ name: @NAME@
 version: @VERSION@
 description: Template code used for Bukkit plugins
 author: EdGruberman (ed@rjump.com)
-website: http://www.rjump.com
+website: http://github.com/EdGruberman
 main: edgruberman.bukkit.simpletemplate.Main
 commands:
     'simpletemplate:command.action':
