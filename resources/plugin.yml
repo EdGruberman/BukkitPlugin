@@ -1,7 +1,7 @@
 name: @NAME@
-description: Template code used for Bukkit plugins
 version: @VERSION@
-author: @AUTHOR@
+description: Template code used for Bukkit plugins
+author: EdGruberman (ed@rjump.com)
 website: http://www.rjump.com
 main: edgruberman.bukkit.simpletemplate.Main
 commands:
