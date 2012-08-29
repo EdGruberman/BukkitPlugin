@@ -135,7 +135,7 @@ public class CustomPlugin extends JavaPlugin {
             if (h.getLevel().intValue() > level.intValue()) h.setLevel(level);
 
         this.getLogger().setLevel(level);
-        this.getLogger().log(Level.CONFIG, "Log level set to: {0} ({1})"
+        this.getLogger().log(Level.CONFIG, "Log level set to: {0} ({1,number,#})"
                 , new Object[] { this.getLogger().getLevel(), this.getLogger().getLevel().intValue() });
     }
 
