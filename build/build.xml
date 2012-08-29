@@ -103,6 +103,10 @@
                 <filter token="VERSION" value="${version}" />
             </filterset>
         </copy>
+        
+        <copy todir="${stage}" preservelastmodified="true">
+            <fileset dir="${resources}" excludes="**/*.yml"/>
+        </copy>
 
         <jar basedir="${stage}/" jarfile="${dist}/${plugin.name}.jar">
             <manifest>
