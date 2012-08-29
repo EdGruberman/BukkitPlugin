@@ -22,7 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * @author EdGruberman (ed@rjump.com)
- * @version 1.0.1
+ * @version 1.0.2
  */
 public class CustomPlugin extends JavaPlugin {
 
