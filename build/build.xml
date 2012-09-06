@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <project name="Bukkit Plugin" default="version-build">
-    <description>Bukkit Plugin Standard Build Management v3.1.0</description>
+    <description>Bukkit Plugin Standard Build Management v3.1.1</description>
 
     <target name="debug">
         <echoproperties />
@@ -103,8 +103,6 @@
         <property prefix="previous" file="${version.properties}" />
         <property name="previous" value="${previous.major}.${previous.minor}.${previous.revision}${previous.type}${previous.build}" />
         <echo message="Previous version was ${previous}" />
-        <antcall target="dist" />
-        <antcall target="install" />
     </target>
 
 
