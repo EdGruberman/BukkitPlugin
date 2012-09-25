@@ -1,4 +1,5 @@
 logLevel: INFO
+colorCode: §
 messages:
     requiresPlayer: '-> §cOnly in-game players§r can use the {1} command' # 1 = Command Label
     requiresArgument: '-> Required §cargument missing§r: {1}' # 1 = Argument Name

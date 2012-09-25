@@ -2,12 +2,11 @@ package edgruberman.bukkit.simpletemplate;
 
 import edgruberman.bukkit.simpletemplate.commands.Reload;
 import edgruberman.bukkit.simpletemplate.messaging.ConfigurationCourier;
-import edgruberman.bukkit.simpletemplate.messaging.Courier;
 import edgruberman.bukkit.simpletemplate.util.CustomPlugin;
 
 public final class Main extends CustomPlugin {
 
-    public static Courier courier;
+    public static ConfigurationCourier courier;
 
     @Override
     public void onLoad() { this.putConfigMinimum(CustomPlugin.CONFIGURATION_FILE, "0.0.0a0"); }
@@ -15,9 +14,9 @@ public final class Main extends CustomPlugin {
     @Override
     public void onEnable() {
         this.reloadConfig();
-        Main.courier = new ConfigurationCourier(this);
+        Main.courier = ConfigurationCourier.Factory.create(this).setColorCode("colorCode").build();
 
-        // TODO Instantiate Objects
+        // TODO things
 
         this.getCommand("simpletemplate:reload").setExecutor(new Reload(this));
     }
