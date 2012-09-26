@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <project name="Bukkit Plugin" default="default">
-    <description>Bukkit Plugin Standard Build Management v4.0.0</description>
+    <description>Bukkit Plugin Standard Build Management v4.0.1</description>
 
     <target name="debug">
         <echoproperties />
@@ -107,14 +107,7 @@
     </target>
 
     <target name="-validate" description="Verify acceptable build path for versioning">
-        <local name="previous.major" />
-        <local name="previous.minor" />
-        <local name="previous.revision" />
-        <local name="previous.type" />
-        <local name="previous.build" />
         <property prefix="previous" file="${version.properties}" />
-        
-        <local name="previous" />
         <property name="previous" value="${previous.major}.${previous.minor}.${previous.revision}${previous.type}${previous.build}" />
         <echo message="Previous version was ${previous}" level="warning" />
         
