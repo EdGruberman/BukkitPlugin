@@ -26,3 +26,9 @@ permissions:
         children:
             simpletemplate.user: true
             simpletempate.reload: true
+    simpletemplate.command.action:
+        description: Can use command.action command
+        default: false
+    simpletemplate.reload:
+        description: Can use reload command
+        default: false
