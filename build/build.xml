@@ -39,6 +39,36 @@
         <antcall target="dist" />
         <antcall target="install" />
     </target>
+    
+    <target name="beta" description="#.#.#b0  |  Move life cycle to beta (public testing encouraged without any guarantee)">
+        <antcall target="-validate"><param name="require-prerelease" value="true"/></antcall>
+        <propertyfile file="${version.properties}">
+            <entry key="type" value="b" />
+            <entry key="build" value="0" type="int" />
+        </propertyfile>
+        <antcall target="dist" />
+        <antcall target="install" />
+    </target>
+
+    <target name="candidate" description="#.#.#rc0  |  Move life cycle to release candidate (functionality no longer intended to change, production release imminent)">
+        <antcall target="-validate"><param name="require-prerelease" value="true"/></antcall>
+        <propertyfile file="${version.properties}">
+            <entry key="type" value="rc" />
+            <entry key="build" value="0" type="int" />
+        </propertyfile>
+        <antcall target="dist" />
+        <antcall target="install" />
+    </target>
+
+    <target name="release" description="#.#.#  |  Remove life cycle indicator for full production release">
+        <antcall target="-validate"><param name="require-prerelease" value="true"/></antcall>
+        <propertyfile file="${version.properties}">
+            <entry key="type" value="" />
+            <entry key="build" value="" />
+        </propertyfile>
+        <antcall target="dist" />
+        <antcall target="install" />
+    </target>
 
     <target name="revision" description="#.#.+a0  |  Increment revision version and reset life cycle to alpha (bug fixes that do not change functionality)">
         <antcall target="-validate" />
@@ -71,36 +101,6 @@
             <entry key="revision" value="0" type="int" />
             <entry key="type" value="a" />
             <entry key="build" value="0" type="int" />
-        </propertyfile>
-        <antcall target="dist" />
-        <antcall target="install" />
-    </target>
-
-    <target name="beta" description="#.#.#b0  |  Move life cycle to beta (public testing encouraged without any guarantee)">
-        <antcall target="-validate"><param name="require-prerelease" value="true"/></antcall>
-        <propertyfile file="${version.properties}">
-            <entry key="type" value="b" />
-            <entry key="build" value="0" type="int" />
-        </propertyfile>
-        <antcall target="dist" />
-        <antcall target="install" />
-    </target>
-
-    <target name="candidate" description="#.#.#rc0  |  Move life cycle to release candidate (functionality no longer intended to change, production release imminent)">
-        <antcall target="-validate"><param name="require-prerelease" value="true"/></antcall>
-        <propertyfile file="${version.properties}">
-            <entry key="type" value="rc" />
-            <entry key="build" value="0" type="int" />
-        </propertyfile>
-        <antcall target="dist" />
-        <antcall target="install" />
-    </target>
-
-    <target name="release" description="#.#.#  |  Remove life cycle indicator for full production release">
-        <antcall target="-validate"><param name="require-prerelease" value="true"/></antcall>
-        <propertyfile file="${version.properties}">
-            <entry key="type" value="" />
-            <entry key="build" value="" />
         </propertyfile>
         <antcall target="dist" />
         <antcall target="install" />
