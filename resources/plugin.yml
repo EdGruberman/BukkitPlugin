@@ -15,17 +15,17 @@ commands:
         permission: simpletemplate.reload
         usage: /<command>
 permissions:
-    simpletemplate.user:
-        description: Can use basic information commands
-        default: true
-        children:
-            simpletemplate.command.action: true
     simpletemplate.admin:
-        description: Can use all commands
+        description: Can use all features of plugin
         default: op
         children:
             simpletemplate.user: true
             simpletempate.reload: true
+    simpletemplate.user:
+        description: Can use basic features of plugin
+        default: true
+        children:
+            simpletemplate.command.action: true
     simpletemplate.command.action:
         description: Can use command.action command
         default: false
