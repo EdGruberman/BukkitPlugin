@@ -15,7 +15,7 @@ import org.bukkit.plugin.Plugin;
  * uses message patterns stored in a {@link org.bukkit.configuration.ConfigurationSection ConfigurationSection}
  *
  * @author EdGruberman (ed@rjump.com)
- * @version 4.2.0
+ * @version 4.3.0
  */
 public class ConfigurationCourier extends Courier {
 
@@ -115,19 +115,24 @@ public class ConfigurationCourier extends Courier {
 
         /** @param section base section containing message patterns */
         public Factory setBase(final ConfigurationSection section) {
+            if (section == null) throw new IllegalArgumentException("ConfigurationSection can not be null");
             this.base = section;
             return this;
         }
 
         /** @param path path to section relative to current base section containing message patterns */
         public Factory setPath(final String path) {
-            this.base = this.base.getConfigurationSection(path);
+            final ConfigurationSection section = this.base.getConfigurationSection(path);
+            if (section == null) throw new IllegalArgumentException("ConfigurationSection not found: " + path);
+            this.setBase(section);
             return this;
         }
 
         /** @param key path to color code prefix character in base configuration */
         public Factory setColorCode(final String key) {
-            this.setColorCode(this.base.getString(key).charAt(0));
+            final String value = this.base.getString(key);
+            if (value == null) throw new IllegalArgumentException("Color code not found: " + this.base.getCurrentPath() + this.base.getRoot().options().pathSeparator() + key);
+            this.setColorCode(value.charAt(0));
             return this;
         }
 
