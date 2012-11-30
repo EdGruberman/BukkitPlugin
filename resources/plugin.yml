@@ -16,13 +16,13 @@ commands:
         usage: /<command>
 permissions:
     simpletemplate.admin:
-        description: Can use all features of plugin
+        description: Can use all features
         default: op
         children:
             simpletemplate.user: true
             simpletempate.reload: true
     simpletemplate.user:
-        description: Can use basic features of plugin
+        description: Can use basic features
         default: true
         children:
             simpletemplate.command.action: true
