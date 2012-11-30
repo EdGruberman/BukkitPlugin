@@ -15,7 +15,7 @@ import org.bukkit.plugin.Plugin;
  * uses message patterns stored in a {@link org.bukkit.configuration.ConfigurationSection ConfigurationSection}
  *
  * @author EdGruberman (ed@rjump.com)
- * @version 4.3.0
+ * @version 4.4.0
  */
 public class ConfigurationCourier extends Courier {
 
@@ -65,28 +65,24 @@ public class ConfigurationCourier extends Courier {
         return super.format(this.getBase().getString(key), arguments);
     }
 
-    @Override
     public void send(final CommandSender target, final String key, final Object... arguments) {
         final Recipients recipients = new Individual(target);
         final List<Message> messages = this.compose(key, arguments);
         this.submit(recipients, messages);
     }
 
-    @Override
     public void broadcast(final String key, final Object... arguments) {
         final Recipients recipients = new ServerPlayers();
         final List<Message> messages = this.compose(key, arguments);
         this.submit(recipients, messages);
     }
 
-    @Override
     public void world(final World target, final String key, final Object... arguments) {
         final Recipients recipients = new WorldPlayers(target);
         final List<Message> messages = this.compose(key, arguments);
         this.submit(recipients, messages);
     }
 
-    @Override
     public void publish(final String permission, final String key, final Object... arguments) {
         final Recipients recipients = new PermissionSubscribers(permission);
         final List<Message> messages = this.compose(key, arguments);

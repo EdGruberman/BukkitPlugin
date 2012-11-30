@@ -12,7 +12,7 @@ import org.bukkit.plugin.Plugin;
  * handles message delivery and logging
  *
  * @author EdGruberman (ed@rjump.com)
- * @version 4.1.0
+ * @version 5.0.0
  */
 public class Courier {
 
@@ -64,28 +64,28 @@ public class Courier {
     }
 
     /** deliver message to individual player */
-    public void send(final CommandSender sender, final String pattern, final Object... arguments) {
+    public void sendMessage(final CommandSender sender, final String pattern, final Object... arguments) {
         final Recipients recipients = new Individual(sender);
         final Message message = this.draft(pattern, arguments);
         this.submit(recipients, message);
     }
 
     /** deliver message to all players on server */
-    public void broadcast(final String pattern, final Object... arguments) {
+    public void broadcastMessage(final String pattern, final Object... arguments) {
         final Recipients recipients = new ServerPlayers();
         final Message message = this.draft(pattern, arguments);
         this.submit(recipients, message);
     }
 
     /** deliver message to players in a world */
-    public void world(final World world, final String pattern, final Object... arguments) {
+    public void worldMessage(final World world, final String pattern, final Object... arguments) {
         final Recipients recipients = new WorldPlayers(world);
         final Message message = this.draft(pattern, arguments);
         this.submit(recipients, message);
     }
 
     /** deliver message to players with a permission */
-    public void publish(final String permission, final String pattern, final Object... arguments) {
+    public void publishMessage(final String permission, final String pattern, final Object... arguments) {
         final Recipients recipients = new PermissionSubscribers(permission);
         final Message message = this.draft(pattern, arguments);
         this.submit(recipients, message);
