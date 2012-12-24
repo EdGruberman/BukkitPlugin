@@ -9,7 +9,7 @@ public final class Main extends CustomPlugin {
     public static ConfigurationCourier courier;
 
     @Override
-    public void onLoad() { this.putConfigMinimum(CustomPlugin.CONFIGURATION_FILE, "0.0.0a0"); }
+    public void onLoad() { this.putConfigMinimum("0.0.0a0"); }
 
     @Override
     public void onEnable() {
