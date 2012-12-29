@@ -9,11 +9,11 @@ commands:
     aliases: [action, command.action]
     description: Reload SimpleTemplate plugin
     permission: simpletemplate.command.action
-    usage: /<command>
+    usage: '§f-> §7Usage: §b/<command>'
   'simpletemplate:reload':
     description: Reload SimpleTemplate plugin
     permission: simpletemplate.reload
-    usage: /<command>
+    usage: '§f-> §7Usage: §b/<command>'
 permissions:
   simpletemplate.admin:
     description: Can use all features
