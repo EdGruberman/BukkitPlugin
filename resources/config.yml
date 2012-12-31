@@ -1,9 +1,8 @@
 log-level: INFO
 language:
   color-code: '§'
-  not-found: '§f-> §b§o{1} §cnot found§7: §f{2}' # 1 = Argument Name, 2 = Argument Value
-  requires-player: '-> §cOnly in-game players§7 can use the {1} command' # 1 = Command Label
-  requires-argument: '-> §7Required §cargument missing§7: §b§o{1}' # 1 = Argument Name
-  unknown-argument: '-> §eUnable to determine §b§o{1}§7: §f{2}' # 1 = Argument Name, 2 = Argument Value
-  reload: '-> §7{1} plugin §2reloaded' # 1 = Plugin Name
+  requires-player: '§f-> §cOnly in-game players§7 can use the §b/{1} §7command' # 1 = Command Label
+  requires-argument: '§f-> §cMissing §7required argument: §b§o{1}' # 1 = Argument Name
+  unknown-argument: '§f-> §eUnknown§f value for §b§o{1}§7: §f{2}' # 1 = Argument Name, 2 = Argument Value
+  reload: '§f-> §2Reloaded §7{1} plugin' # 1 = Plugin Name
 version: @VERSION@
