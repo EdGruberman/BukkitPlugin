@@ -25,7 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * @author EdGruberman (ed@rjump.com)
- * @version 1.3.1
+ * @version 1.3.2
  */
 public class CustomPlugin extends JavaPlugin {
 
@@ -92,7 +92,7 @@ public class CustomPlugin extends JavaPlugin {
         } catch (final Exception e) {
             throw new RuntimeException("Unable to load configuration file: " + existing.getPath(), e);
         }
-        yaml.setDefaults(this.loadEmbeddedConfig(CustomPlugin.CONFIGURATION_FILE));
+        yaml.setDefaults(this.loadEmbeddedConfig(resource));
         if (required == null) return yaml;
 
         // verify required or later version
