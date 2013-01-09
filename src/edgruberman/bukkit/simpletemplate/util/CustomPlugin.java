@@ -25,7 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * @author EdGruberman (ed@rjump.com)
- * @version 1.3.2
+ * @version 1.3.3
  */
 public class CustomPlugin extends JavaPlugin {
 
@@ -96,7 +96,7 @@ public class CustomPlugin extends JavaPlugin {
         if (required == null) return yaml;
 
         // verify required or later version
-        final Version version = new Version(yaml.getString("version"));
+        final Version version = new Version(yaml.getString("version", null));
         if (version.compareTo(required) >= 0) return yaml;
 
         this.archiveConfig(resource, version);
