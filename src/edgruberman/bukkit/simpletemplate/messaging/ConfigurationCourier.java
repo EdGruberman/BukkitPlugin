@@ -136,10 +136,10 @@ public class ConfigurationCourier extends Courier {
         }
 
         /** @param key path to color code prefix character in base configuration */
-        public Factory setColorCode(final String key) {
+        public Factory setFormatCode(final String key) {
             final String value = this.base.getString(key);
             if (value == null) throw new IllegalArgumentException("Color code not found: " + this.base.getCurrentPath() + this.base.getRoot().options().pathSeparator() + key);
-            this.setColorCode(value.charAt(0));
+            this.setFormatCode(value.charAt(0));
             return this;
         }
 
@@ -150,8 +150,8 @@ public class ConfigurationCourier extends Courier {
         }
 
         @Override
-        public Factory setColorCode(final char colorCode) {
-            super.setColorCode(colorCode);
+        public Factory setFormatCode(final char colorCode) {
+            super.setFormatCode(colorCode);
             return this;
         }
 

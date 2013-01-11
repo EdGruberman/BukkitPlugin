@@ -1,6 +1,6 @@
 log-level: INFO
 language:
-  color-code: '§'
+  format-code: '§'
   requires-player: '§f-> §cOnly in-game players§7 can use the §b/{1} §7command' # 1 = Command Label
   requires-argument: '§f-> §cMissing §7required argument: §b§o{1}' # 1 = Argument Name
   unknown-argument: '§f-> §eUnknown§f value for §b§o{1}§7: §f{2}' # 1 = Argument Name, 2 = Argument Value

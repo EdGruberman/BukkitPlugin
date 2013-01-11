@@ -14,7 +14,7 @@ public final class Main extends CustomPlugin {
     @Override
     public void onEnable() {
         this.reloadConfig();
-        Main.courier = ConfigurationCourier.Factory.create(this).setBase(this.loadConfig("messages.yml")).setColorCode("color-code").build();
+        Main.courier = ConfigurationCourier.Factory.create(this).setBase(this.loadConfig("messages.yml")).setFormatCode("format-code").build();
 
         // TODO things
 
