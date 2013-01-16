@@ -10,7 +10,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * handles message delivery and logging; uses keys to reference message patterns stored in a {@link org.bukkit.configuration.ConfigurationSection ConfigurationSection}
  * @author EdGruberman (ed@rjump.com)
- * @version 5.1.2
+ * @version 5.2.0
  */
 public class ConfigurationCourier extends Courier {
 
@@ -25,6 +25,11 @@ public class ConfigurationCourier extends Courier {
     /** @return section all message pattern key paths are relative to */
     public ConfigurationSection getBase() {
         return this.base;
+    }
+
+    /** @return section at path relative to {@link #getBase base} */
+    public ConfigurationSection getSection(final String path) {
+        return this.base.getConfigurationSection(path);
     }
 
     /**
