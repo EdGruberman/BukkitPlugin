@@ -10,7 +10,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * handles message delivery and logging; uses keys to reference message patterns stored in a {@link org.bukkit.configuration.ConfigurationSection ConfigurationSection}
  * @author EdGruberman (ed@rjump.com)
- * @version 5.2.0
+ * @version 5.2.1
  */
 public class ConfigurationCourier extends Courier {
 
@@ -69,10 +69,10 @@ public class ConfigurationCourier extends Courier {
      * deliver message to individual player
      * @param key path relative to {@link #getBase base} that contains message pattern (null and missing patterns are silently ignored and not sent)
      */
-    public void send(final CommandSender target, final String key, final Object... arguments) {
+    public void send(final CommandSender sender, final String key, final Object... arguments) {
         final String pattern = this.pattern(key);
         if (pattern == null) return;
-        this.sendMessage(target, pattern, arguments);
+        this.sendMessage(sender, pattern, arguments);
     }
 
     /**
@@ -89,10 +89,10 @@ public class ConfigurationCourier extends Courier {
      * deliver message to players in a world
      * @param key path relative to {@link #getBase base} that contains message pattern (null and missing patterns are silently ignored and not sent)
      */
-    public void world(final World target, final String key, final Object... arguments) {
+    public void world(final World world, final String key, final Object... arguments) {
         final String pattern = this.pattern(key);
         if (pattern == null) return;
-        this.worldMessage(target, pattern, arguments);
+        this.worldMessage(world, pattern, arguments);
     }
 
     /**
