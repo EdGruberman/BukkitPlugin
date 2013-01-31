@@ -11,7 +11,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * handles message delivery and logging; uses keys to reference message patterns stored in a {@link org.bukkit.configuration.ConfigurationSection ConfigurationSection}
  * @author EdGruberman (ed@rjump.com)
- * @version 6.1.0
+ * @version 6.1.1
  */
 public class ConfigurationCourier extends Courier {
 
@@ -48,7 +48,7 @@ public class ConfigurationCourier extends Courier {
      */
     public String translate(final String key) {
         final String pattern = this.base.getString(key);
-        if (pattern.equals("")) {
+        if (pattern == null || pattern.equals("")) {
             this.plugin.getLogger().log(Level.FINEST, "String value not found for {0} in {1}", new Object[] { key, ( this.base.getCurrentPath().equals("") ? "(root)" : this.base.getCurrentPath() ) });
             return null;
         }
