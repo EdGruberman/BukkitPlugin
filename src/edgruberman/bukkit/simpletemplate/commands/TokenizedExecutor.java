@@ -8,30 +8,36 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-/** transforms simple space delimited command arguments to allow for double quote delimited arguments containing spaces */
-abstract class Executor implements CommandExecutor {
+/** parses command arguments according to a {@link StrTokenizer} definition */
+abstract class TokenizedExecutor implements CommandExecutor {
 
     protected final StrTokenizer tokenizer = new StrTokenizer();
 
-    protected Executor() {
+    /** configures tokenizer to delimit by spaces using double quotes as the quote character */
+    protected TokenizedExecutor() {
         this.tokenizer.setDelimiterChar(' ');
         this.tokenizer.setQuoteChar('"');
     }
 
+    /**
+     * same as {@link CommandExecutor#onCommand(CommandSender, Command, String, String[]) CommandExecutor.onCommand} except with transformed arguments
+     *
+     * @param sender Source of the command
+     * @param command Command which was executed
+     * @param label Alias of the command which was used
+     * @param args passed command arguments split by {@link #tokenizer token} definition
+     * @return true if a valid command, otherwise false
+     */
+    protected abstract boolean onCommand(final CommandSender sender, final Command command, final String label, final List<String> args);
+
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
-        return this.execute(sender, command, label, this.transform(args));
+        return this.onCommand(sender, command, label, this.transform(args));
     }
-
-    protected abstract boolean execute(final CommandSender sender, final Command command, final String label, final List<String> args);
 
     protected List<String> transform(final String... args) {
-        this.tokenizer.reset(Executor.join(args, " "));
+        this.tokenizer.reset(TokenizedExecutor.join(args, " "));
         return Arrays.asList(this.tokenizer.getTokenArray());
-    }
-
-    protected static String join(final List<String> args, final String delim) {
-        return Executor.join(args.toArray(new String[args.size()]), delim);
     }
 
     protected static String join(final String[] args, final String delim) {
