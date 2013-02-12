@@ -1,4 +1,4 @@
-package edgruberman.bukkit.simpletemplate.commands;
+package edgruberman.bukkit.simpletemplate.util;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 /** parses command arguments according to a {@link StrTokenizer} definition */
-abstract class TokenizedExecutor implements CommandExecutor {
+public abstract class TokenizedExecutor implements CommandExecutor {
 
     protected final StrTokenizer tokenizer = new StrTokenizer();
 
