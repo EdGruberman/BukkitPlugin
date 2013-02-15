@@ -17,7 +17,7 @@ import org.bukkit.plugin.Plugin;
  * Queues save requests to prevent occurring more than a maximum rate.  Also enables delayed serialization processing for individual sections to occur at time of save.
  *
  * @author EdGruberman (ed@rjump.com)
- * @version 1.1.0
+ * @version 1.2.0
  */
 public class BufferedYamlConfiguration extends YamlConfiguration implements Runnable {
 
@@ -50,7 +50,7 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
         return this.lastSaveAttempt;
     }
 
-    public void load() throws IOException, InvalidConfigurationException {
+    public BufferedYamlConfiguration load() throws IOException, InvalidConfigurationException {
         try {
             super.load(this.file);
         } catch (final FileNotFoundException e) {
@@ -60,6 +60,7 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
         } catch (final InvalidConfigurationException e) {
             throw e;
         }
+        return this;
     }
 
     @Override
