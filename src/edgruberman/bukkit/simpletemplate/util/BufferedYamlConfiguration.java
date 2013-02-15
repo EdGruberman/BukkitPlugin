@@ -12,7 +12,7 @@ import org.bukkit.plugin.Plugin;
 
 /**
  * @author EdGruberman (ed@rjump.com)
- * @version 1.0.0
+ * @version 1.0.1
  */
 public class BufferedYamlConfiguration extends YamlConfiguration implements Runnable {
 
@@ -97,7 +97,7 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
         if (elapsed < this.minSave) {
             final long delay = this.minSave - elapsed;
 
-            if (this.isQueued() || this.isRunning()) {
+            if (this.isQueued()) {
                 this.plugin.getLogger().log(Level.FINEST
                         , "Save request already queued to run in {0} seconds for file: {1} (Last attempted {2} seconds ago)"
                         , new Object[] { delay / 1000, this.getFile(), elapsed });
@@ -117,10 +117,6 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
 
     public boolean isQueued() {
         return Bukkit.getScheduler().isQueued(this.taskSave);
-    }
-
-    public boolean isRunning() {
-        return Bukkit.getScheduler().isCurrentlyRunning(this.taskSave);
     }
 
 }
