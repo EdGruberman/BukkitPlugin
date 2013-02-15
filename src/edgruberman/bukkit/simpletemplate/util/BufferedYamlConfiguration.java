@@ -3,16 +3,21 @@ package edgruberman.bukkit.simpletemplate.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.plugin.Plugin;
 
 /**
+ * Queues save requests to prevent occurring more than a maximum rate.  Also enables delayed serialization processing for individual sections to occur at time of save.
+ *
  * @author EdGruberman (ed@rjump.com)
- * @version 1.0.1
+ * @version 1.1.0
  */
 public class BufferedYamlConfiguration extends YamlConfiguration implements Runnable {
 
@@ -20,16 +25,16 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
 
     private final Plugin plugin;
     private File file;
-    private final long minSave;
-
+    private final long rate;
+    private final Map<String, ConfigurationSerializable> delayedSections = new LinkedHashMap<String, ConfigurationSerializable>();
     private long lastSaveAttempt = -1;
     private int taskSave = -1;
 
-    /** @param minSave minimum time between saves (milliseconds) */
-    public BufferedYamlConfiguration(final Plugin plugin, final File file, final long minSave) throws IOException, InvalidConfigurationException {
+    /** @param rate minimum time between saves (milliseconds) */
+    public BufferedYamlConfiguration(final Plugin plugin, final File file, final long rate) throws IOException, InvalidConfigurationException {
         this.plugin = plugin;
         this.file = file;
-        this.minSave = minSave;
+        this.rate = rate;
         this.load();
     }
 
@@ -38,7 +43,7 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
     }
 
     public long getMinSave() {
-        return this.minSave;
+        return this.rate;
     }
 
     public long getLastSaveAttempt() {
@@ -78,6 +83,10 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
     /** force immediate save */
     public void save() {
         try {
+            for (final Map.Entry<String, ConfigurationSerializable> section : this.delayedSections.entrySet())
+                this.set(section.getKey(), section.getValue().serialize());
+            this.delayedSections.clear();
+
             super.save(this.file);
 
         } catch (final IOException e) {
@@ -94,8 +103,8 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
     public void queueSave() {
         final long elapsed = System.currentTimeMillis() - this.lastSaveAttempt;
 
-        if (elapsed < this.minSave) {
-            final long delay = this.minSave - elapsed;
+        if (elapsed < this.rate) {
+            final long delay = this.rate - elapsed;
 
             if (this.isQueued()) {
                 this.plugin.getLogger().log(Level.FINEST
@@ -117,6 +126,14 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
 
     public boolean isQueued() {
         return Bukkit.getScheduler().isQueued(this.taskSave);
+    }
+
+    /**
+     * queue a ConfigurationSection to be updated when the next save occurs, request order preserved
+     * @param path section path (a conflicting pending request will be replaced and put at the end of the queue)
+     */
+    public void delaySection(final String path, final ConfigurationSerializable serializable) {
+        this.delayedSections.put(path, serializable);
     }
 
 }
