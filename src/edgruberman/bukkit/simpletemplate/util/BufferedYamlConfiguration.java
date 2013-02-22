@@ -17,7 +17,7 @@ import org.bukkit.plugin.Plugin;
  * Queues save requests to prevent occurring more than a maximum rate.  Also enables delayed serialization processing for individual sections to occur at time of save.
  *
  * @author EdGruberman (ed@rjump.com)
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class BufferedYamlConfiguration extends YamlConfiguration implements Runnable {
 
@@ -85,7 +85,7 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
     public void save() {
         try {
             for (final Map.Entry<String, ConfigurationSerializable> section : this.lazySections.entrySet())
-                this.set(section.getKey(), section.getValue().serialize());
+                this.set(section.getKey(), ( section.getValue() != null ? section.getValue().serialize() : null ));
             this.lazySections.clear();
 
             super.save(this.file);
