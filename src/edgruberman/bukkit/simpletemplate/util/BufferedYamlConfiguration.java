@@ -18,25 +18,24 @@ import org.bukkit.plugin.Plugin;
  * Also supports lazy serialization updates for individual sections to occur at time of save.
  *
  * @author EdGruberman (ed@rjump.com)
- * @version 1.5.0
+ * @version 2.0.0
  */
 public class BufferedYamlConfiguration extends YamlConfiguration implements Runnable {
 
-    private static final int TICKS_PER_SECOND = 20;
+    protected static final int TICKS_PER_SECOND = 20;
 
-    private final Plugin owner;
-    private File file;
-    private long rate;
-    private final Map<String, ConfigurationSerializable> lazySections = new LinkedHashMap<String, ConfigurationSerializable>();
-    private long lastSaveAttempt = -1;
-    private int taskSave = -1;
+    protected final Plugin owner;
+    protected File file;
+    protected long rate;
+    protected final Map<String, ConfigurationSerializable> lazySections = new LinkedHashMap<String, ConfigurationSerializable>();
+    protected long lastSaveAttempt = -1;
+    protected int taskSave = -1;
 
     /** @param rate minimum time between saves (milliseconds) */
-    public BufferedYamlConfiguration(final Plugin owner, final File file, final long rate) throws IOException, InvalidConfigurationException {
+    public BufferedYamlConfiguration(final Plugin owner, final File file, final long rate) {
         this.owner = owner;
         this.file = file;
         this.rate = rate;
-        this.load();
     }
 
     public Plugin getOwner() {
@@ -97,7 +96,7 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
     public void save() {
         try {
             for (final Map.Entry<String, ConfigurationSerializable> section : this.lazySections.entrySet())
-                this.set(section.getKey(), ( section.getValue() != null ? section.getValue().serialize() : null ));
+                this.set(section.getKey(), section.getValue());
             this.lazySections.clear();
 
             super.save(this.file);
