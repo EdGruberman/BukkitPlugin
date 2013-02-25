@@ -18,7 +18,7 @@ import org.bukkit.plugin.Plugin;
  * Also supports lazy serialization updates for individual sections to occur at time of save.
  *
  * @author EdGruberman (ed@rjump.com)
- * @version 2.0.0
+ * @version 2.0.1
  */
 public class BufferedYamlConfiguration extends YamlConfiguration implements Runnable {
 
@@ -121,7 +121,7 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
             if (this.isQueued()) {
                 this.owner.getLogger().log(Level.FINEST
                         , "Save request already queued to run in {0} seconds for file: {1} (Last attempted {2} seconds ago)"
-                        , new Object[] { delay / 1000, this.getFile(), elapsed });
+                        , new Object[] { delay / 1000, this.getFile(), elapsed / 1000 });
                 return;
             }
 
@@ -129,7 +129,7 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
             this.taskSave = Bukkit.getScheduler().scheduleSyncDelayedTask(this.owner, this, delay * BufferedYamlConfiguration.TICKS_PER_SECOND);
             this.owner.getLogger().log(Level.FINEST
                     , "Queued save request to run in {0} seconds for configuration file: {1} (Last attempted {2} seconds ago)"
-                    , new Object[] { delay / 1000, this.getFile(), elapsed });
+                    , new Object[] { delay / 1000, this.getFile(), elapsed / 1000 });
             return;
         }
 
