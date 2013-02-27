@@ -3,22 +3,18 @@ package edgruberman.bukkit.simpletemplate.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.plugin.Plugin;
 
 /**
  * Queues save requests to prevent occurring more than a maximum rate.
- * Also supports lazy serialization updates for individual sections to occur at time of save.
  *
  * @author EdGruberman (ed@rjump.com)
- * @version 2.0.1
+ * @version 2.1.1
  */
 public class BufferedYamlConfiguration extends YamlConfiguration implements Runnable {
 
@@ -27,7 +23,6 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
     protected final Plugin owner;
     protected File file;
     protected long rate;
-    protected final Map<String, ConfigurationSerializable> lazySections = new LinkedHashMap<String, ConfigurationSerializable>();
     protected long lastSaveAttempt = -1;
     protected int taskSave = -1;
 
@@ -95,10 +90,6 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
     /** force immediate save */
     public void save() {
         try {
-            for (final Map.Entry<String, ConfigurationSerializable> section : this.lazySections.entrySet())
-                this.set(section.getKey(), section.getValue());
-            this.lazySections.clear();
-
             super.save(this.file);
 
         } catch (final IOException e) {
@@ -126,7 +117,7 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
             }
 
             // schedule task to flush cache to file system
-            this.taskSave = Bukkit.getScheduler().scheduleSyncDelayedTask(this.owner, this, delay * BufferedYamlConfiguration.TICKS_PER_SECOND);
+            this.taskSave = Bukkit.getScheduler().scheduleSyncDelayedTask(this.owner, this, delay / 1000 * BufferedYamlConfiguration.TICKS_PER_SECOND);
             this.owner.getLogger().log(Level.FINEST
                     , "Queued save request to run in {0} seconds for configuration file: {1} (Last attempted {2} seconds ago)"
                     , new Object[] { delay / 1000, this.getFile(), elapsed / 1000 });
@@ -138,14 +129,6 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
 
     public boolean isQueued() {
         return Bukkit.getScheduler().isQueued(this.taskSave);
-    }
-
-    /**
-     * queue a ConfigurationSection to be updated when the next save occurs, request order preserved
-     * @param path section path (a conflicting pending request will be replaced and put at the end of the queue)
-     */
-    public void setLazy(final String path, final ConfigurationSerializable section) {
-        this.lazySections.put(path, section);
     }
 
 }
