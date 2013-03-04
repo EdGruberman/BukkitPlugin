@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <project name="Bukkit plugin" default="default">
-    <description>Bukkit plugin standard build management v5.0.1</description>
+    <description>Bukkit plugin standard build management v5.0.2</description>
     <tstamp><format property="build.start" pattern="yyyy-MM-dd HH:mm:ss z" timezone="UTC" /></tstamp>
 
 
@@ -139,7 +139,7 @@
     </target>
 
     <target name="-validate-message" if="invalid.sources">
-        <echo message="${invalid.message}" level="error" />
+        <echo message="${message.sources}" level="error" />
     </target>
 
     <target name="-validate" description="validate project is ready to be built" depends="-validate-version,-validate-sources,-validate-message" />
