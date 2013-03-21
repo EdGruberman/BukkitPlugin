@@ -9,9 +9,9 @@ import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * @author EdGruberman (ed@rjump.com)
- * @version 1.1.0
+ * @version 1.2.0
  */
-public class JoinList extends ArrayList<Object> {
+public class JoinList<T> extends ArrayList<T> {
 
     private static final String CONFIG_KEY_FORMAT = "format";
     private static final String CONFIG_KEY_ITEM = "item";
@@ -49,7 +49,7 @@ public class JoinList extends ArrayList<Object> {
 
     @Override
     public String toString() {
-        final Iterator<Object> i = this.iterator();
+        final Iterator<T> i = this.iterator();
         if (!i.hasNext()) return MessageFormat.format(this.format, "");
 
         final StringBuilder items = new StringBuilder();
