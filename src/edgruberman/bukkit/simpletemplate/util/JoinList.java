@@ -3,13 +3,14 @@ package edgruberman.bukkit.simpletemplate.util;
 import java.text.FieldPosition;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * @author EdGruberman (ed@rjump.com)
- * @version 1.2.0
+ * @version 1.3.0
  */
 public class JoinList<T> extends ArrayList<T> {
 
@@ -41,6 +42,11 @@ public class JoinList<T> extends ArrayList<T> {
         this(config.getString(JoinList.CONFIG_KEY_FORMAT, JoinList.DEFAULT_FORMAT)
                 , config.getString(JoinList.CONFIG_KEY_ITEM, JoinList.DEFAULT_ITEM)
                 , config.getString(JoinList.CONFIG_KEY_DELIMITER, JoinList.DEFAULT_DELIMITER));
+    }
+
+    public JoinList(final ConfigurationSection config, final Collection<? extends T> collection) {
+        this(config);
+        this.addAll(collection);
     }
 
     public boolean add(final Object... arguments) {
