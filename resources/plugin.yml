@@ -5,15 +5,15 @@ author: EdGruberman (ed@rjump.com)
 website: http://github.com/EdGruberman/SimpleTemplate
 main: edgruberman.bukkit.simpletemplate.Main
 commands:
-  'simpletemplate:command.action':
-    aliases: [action, command.action]
+  'simpletemplate:action':
+    aliases: [action, simpletemplate.action]
     description: Reload SimpleTemplate plugin
     permission: simpletemplate.command.action
-    usage: '§f-> §7Usage: §b/<command>'
+    usage: '§f-> §7Usage: §b§l/<command> §3[§oparameter§3]'
   'simpletemplate:reload':
     description: Reload SimpleTemplate plugin
     permission: simpletemplate.reload
-    usage: '§f-> §7Usage: §b/<command>'
+    usage: '§f-> §7Usage: §b§l/<command>'
 permissions:
   simpletemplate.admin:
     description: Can use all features
