@@ -52,6 +52,7 @@ public class SynchronousPluginLogger extends Logger {
     public SynchronousPluginLogger(final Plugin plugin) {
         super(plugin.getLogger().getName() + "-" + SynchronousPluginLogger.class.getName(), null);
         this.plugin = plugin;
+        this.pattern = "{0}";
         this.addHandler(new PassThroughHandler());
         this.setLevel(plugin.getLogger().getLevel());
     }
