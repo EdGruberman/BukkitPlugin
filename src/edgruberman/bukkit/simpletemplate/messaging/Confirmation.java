@@ -5,7 +5,6 @@ import java.util.logging.LogRecord;
 
 /**
  * summary of {@link Message} delivery
- *
  * @author EdGruberman (ed@rjump.com)
  * @version 2.0.0
  */
@@ -21,7 +20,6 @@ public class Confirmation extends Message {
 
     /**
      * create a delivery summary
-     *
      * @param level visibility of log entry
      * @param received count of recipients message was delivered to
      * @param pattern {@link java.text.MessageFormat MessageFormat} pattern

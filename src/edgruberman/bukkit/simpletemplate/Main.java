@@ -1,12 +1,12 @@
 package edgruberman.bukkit.simpletemplate;
 
 import edgruberman.bukkit.simpletemplate.commands.Reload;
-import edgruberman.bukkit.simpletemplate.messaging.ConfigurationCourier;
+import edgruberman.bukkit.simpletemplate.messaging.Courier.ConfigurationCourier;
 import edgruberman.bukkit.simpletemplate.util.CustomPlugin;
 
 public final class Main extends CustomPlugin {
 
-    public static ConfigurationCourier courier;
+    public static edgruberman.bukkit.simpletemplate.messaging.Courier.ConfigurationCourier courier;
 
     @Override
     public void onLoad() {

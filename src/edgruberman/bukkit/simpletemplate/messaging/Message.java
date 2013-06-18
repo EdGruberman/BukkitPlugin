@@ -44,7 +44,7 @@ public class Message extends MessageFormat {
         for(int i = 0; i < formats.length; i++) {
             if (!(formats[i] instanceof DateFormat)) continue;
 
-            if (timeZone == null) timeZone = Recipients.getTimeZone(target);
+            if (timeZone == null) timeZone = Recipient.getTimeZone(target);
             final DateFormat sdf = (DateFormat) formats[i];
             sdf.setTimeZone(timeZone);
             this.setFormatByArgumentIndex(i, sdf);
