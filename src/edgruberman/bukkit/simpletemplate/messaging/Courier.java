@@ -56,9 +56,9 @@ public class Courier {
      * deliver message to recipients and record log entry
      * (this will not timestamp the message)
      */
-    public void submit(final Recipient recipients, final Message message) {
+    public void submit(final Recipients recipients, final Message message) {
         try {
-            final Confirmation confirmation = recipients.deliver(message);
+            final Confirmation confirmation = message.deliver(recipients);
             this.plugin.getLogger().log(confirmation.toLogRecord());
 
         } catch (final RuntimeException e) {
@@ -68,28 +68,28 @@ public class Courier {
 
     /** deliver message to individual player */
     public void sendMessage(final CommandSender sender, final String pattern, final Object... arguments) {
-        final Recipient recipients = new Recipient.Sender(sender);
+        final Recipients recipients = Recipients.Sender.create(sender);
         final Message message = this.draft(pattern, arguments);
         this.submit(recipients, message);
     }
 
     /** deliver message to all players on server */
     public void broadcastMessage(final String pattern, final Object... arguments) {
-        final Recipient recipients = new Recipient.ServerPlayers();
+        final Recipients recipients = new Recipients.ServerPlayers();
         final Message message = this.draft(pattern, arguments);
         this.submit(recipients, message);
     }
 
     /** deliver message to players in a world */
     public void worldMessage(final World world, final String pattern, final Object... arguments) {
-        final Recipient recipients = new Recipient.WorldPlayers(world);
+        final Recipients recipients = new Recipients.WorldPlayers(world);
         final Message message = this.draft(pattern, arguments);
         this.submit(recipients, message);
     }
 
     /** deliver message to players with a permission */
     public void publishMessage(final String permission, final String pattern, final Object... arguments) {
-        final Recipient recipients = new Recipient.PermissionSubscribers(permission);
+        final Recipients recipients = new Recipients.PermissionSubscribers(permission);
         final Message message = this.draft(pattern, arguments);
         this.submit(recipients, message);
     }

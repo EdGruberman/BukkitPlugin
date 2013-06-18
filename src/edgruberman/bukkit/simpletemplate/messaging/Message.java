@@ -3,7 +3,9 @@ package edgruberman.bukkit.simpletemplate.messaging;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.bukkit.Bukkit;
@@ -13,7 +15,7 @@ import org.bukkit.command.CommandSender;
  * {@link java.text.MessageFormat MessageFormat} that sets time zone of each date argument for target
  *
  * @author EdGruberman (ed@rjump.com)
- * @version 2.3.0
+ * @version 3.0.0
  */
 public class Message extends MessageFormat {
 
@@ -36,6 +38,16 @@ public class Message extends MessageFormat {
         this.suffix = null;
     }
 
+    public Confirmation deliver(final Recipients recipients) {
+        final List<CommandSender> received = new ArrayList<CommandSender>();
+        for (final CommandSender target : recipients.targets()) {
+            final String formatted = this.format(target).toString();
+            target.sendMessage(formatted);
+            received.add(target);
+        }
+        return recipients.confirm(this, received);
+    }
+
     /** resolve arguments and apply to pattern adjusting as necessary for target */
     public StringBuffer format(final CommandSender target) {
         // format all dates with time zone for target
@@ -44,7 +56,7 @@ public class Message extends MessageFormat {
         for(int i = 0; i < formats.length; i++) {
             if (!(formats[i] instanceof DateFormat)) continue;
 
-            if (timeZone == null) timeZone = Recipient.getTimeZone(target);
+            if (timeZone == null) timeZone = Recipients.getTimeZone(target);
             final DateFormat sdf = (DateFormat) formats[i];
             sdf.setTimeZone(timeZone);
             this.setFormatByArgumentIndex(i, sdf);
