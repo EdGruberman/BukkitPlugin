@@ -9,10 +9,13 @@ import java.util.Iterator;
 import org.bukkit.configuration.ConfigurationSection;
 
 /**
+ * allows object references to be stored for lazy MessageFormat formatting
  * @author EdGruberman (ed@rjump.com)
- * @version 1.3.0
+ * @version 1.4.0
  */
 public class JoinList<T> extends ArrayList<T> {
+
+    private static final long serialVersionUID = 1L;
 
     private static final String CONFIG_KEY_FORMAT = "format";
     private static final String CONFIG_KEY_ITEM = "item";
@@ -22,7 +25,26 @@ public class JoinList<T> extends ArrayList<T> {
     private static final String DEFAULT_ITEM = "{0}";
     private static final String DEFAULT_DELIMITER = " ";
 
-    private static final long serialVersionUID = 1L;
+
+
+    public static String join(final Collection<?> collection) {
+        return JoinList.join(collection, JoinList.DEFAULT_DELIMITER);
+    }
+
+    public static String join(final Collection<?> collection, final String delimiter) {
+        return JoinList.join(collection, delimiter, JoinList.DEFAULT_ITEM);
+    }
+
+    public static String join(final Collection<?> collection, final String delimiter, final String item) {
+        return JoinList.join(collection, delimiter, item, JoinList.DEFAULT_FORMAT);
+    }
+
+    public static String join(final Collection<?> collection, final String delimiter, final String item, final String format) {
+        final JoinList<Object> list = new JoinList<Object>(format, item, delimiter, collection);
+        return list.toString();
+    }
+
+
 
     private final String format;
     private final String item;
@@ -36,6 +58,11 @@ public class JoinList<T> extends ArrayList<T> {
         this.format = format;
         this.item = item;
         this.delimiter = delimiter;
+    }
+
+    public JoinList(final String format, final String item, final String delimiter, final Collection<? extends T> collection) {
+        this(format, item, delimiter);
+        this.addAll(collection);
     }
 
     public JoinList(final ConfigurationSection config) {
