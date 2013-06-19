@@ -10,20 +10,21 @@ import org.bukkit.configuration.ConfigurationSection;
 
 /**
  * allows object references to be stored for lazy MessageFormat formatting
+ *
  * @author EdGruberman (ed@rjump.com)
- * @version 1.4.0
+ * @version 1.5.0
  */
 public class JoinList<T> extends ArrayList<T> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String CONFIG_KEY_FORMAT = "format";
-    private static final String CONFIG_KEY_ITEM = "item";
-    private static final String CONFIG_KEY_DELIMITER = "delimiter";
+    public static final String CONFIG_KEY_FORMAT = "format";
+    public static final String CONFIG_KEY_ITEM = "item";
+    public static final String CONFIG_KEY_DELIMITER = "delimiter";
 
-    private static final String DEFAULT_FORMAT = "{0}";
-    private static final String DEFAULT_ITEM = "{0}";
-    private static final String DEFAULT_DELIMITER = " ";
+    public static final String DEFAULT_FORMAT = "{0}";
+    public static final String DEFAULT_ITEM = "{0}";
+    public static final String DEFAULT_DELIMITER = " ";
 
 
 
