@@ -21,7 +21,7 @@ import com.google.common.io.Files;
  * queues save requests to prevent occurring more than a maximum rate
  *
  * @author EdGruberman (ed@rjump.com)
- * @version 3.0.0
+ * @version 3.1.0
  */
 public class BufferedYamlConfiguration extends YamlConfiguration implements Runnable {
 
@@ -32,15 +32,18 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
     protected final Plugin owner;
     protected File file;
     protected long rate;
-    protected long lastSaveAttempt = -1;
+    protected Logger logger;
+    protected long lastSerialization = -1;
     protected int taskSave = -1;
     protected Object lock = new Object();
+    protected String serialized = null;
 
     /** @param rate minimum time between saves (milliseconds) */
     public BufferedYamlConfiguration(final Plugin owner, final File file, final long rate) {
         this.owner = owner;
         this.file = file;
         this.rate = rate;
+        this.logger = new SynchronousPluginLogger(owner);
     }
 
     public Plugin getOwner() {
@@ -63,7 +66,7 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
     }
 
     public long getLastSaveAttempt() {
-        return this.lastSaveAttempt;
+        return this.lastSerialization;
     }
 
     public void clear() {
@@ -97,37 +100,43 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
 
     /** force immediate save */
     public boolean save() {
+        this.lastSerialization = System.currentTimeMillis();
         try {
             super.save(this.file);
 
         } catch (final IOException e) {
-            this.owner.getLogger().log(Level.SEVERE, "Unable to save configuration file: {0}; {1}", new Object[] { this.file, e });
+            this.logger.log(Level.SEVERE, "Unable to save configuration file: {0}; {1}", new Object[] { this.file, e });
             return false;
-
-        } finally {
-            this.lastSaveAttempt = System.currentTimeMillis();
         }
 
-        this.owner.getLogger().log(Level.FINEST, "Saved configuration file: {0}", this.file);
+        this.logger.log(Level.FINEST, "Saved configuration file: {0}", this.file);
         return true;
     }
 
     public void queueSave() {
-        final long elapsed = System.currentTimeMillis() - this.lastSaveAttempt;
+        synchronized (this.lock) {
+            final boolean pending = (this.serialized != null);
+            if (pending) {
+                this.serialize();
+                this.logger.log(Level.FINEST, "Reserialized current configuration for pending write operation for file: {0}", this.file);
+                return;
+            }
+        }
 
+        final long elapsed = System.currentTimeMillis() - this.lastSerialization;
         if (elapsed < this.rate) {
             final long delay = this.rate - elapsed;
             if (this.isQueued()) {
-                this.owner.getLogger().log(Level.FINEST
-                        , "Save request already queued to run in {0,number,#.0} seconds for file: {1} (Last attempted {2,number,#.0} seconds ago)"
+                this.logger.log(Level.FINEST
+                        , "Save request already queued to run in {0,number,0.0} seconds for file: {1} (Last attempted {2,number,0.0} seconds ago)"
                         , new Object[] { delay / 1000D, this.getFile(), elapsed / 1000D });
                 return;
             }
 
             // schedule task to flush cache to file system
             this.taskSave = Bukkit.getScheduler().scheduleSyncDelayedTask(this.owner, this, delay * BufferedYamlConfiguration.TICKS_PER_SECOND / 1000);
-            this.owner.getLogger().log(Level.FINEST
-                    , "Queued save request to run in {0,number,#.0} seconds for configuration file: {1} (Last attempted {2,number,#.0} seconds ago)"
+            this.logger.log(Level.FINEST
+                    , "Queued save request to run in {0,number,0.0} seconds for configuration file: {1} (Last attempted {2,number,0.0} seconds ago)"
                     , new Object[] { delay / 1000D, this.getFile(), elapsed / 1000D });
             return;
         }
@@ -135,14 +144,22 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
         this.run();
     }
 
+    /** prepare for async write by serializing */
     @Override
     public void run() {
-        this.lastSaveAttempt = System.currentTimeMillis();
-        final String data = this.saveToString();
-        final Logger logger = new SynchronousPluginLogger(this.owner);
-        final Runnable writer = new AsynchronousWriter(this.file, data, logger, this.lock);
-        Bukkit.getScheduler().runTaskAsynchronously(this.owner, writer);
+        // update serialized data and schedule if no async write is pending
+        synchronized (this.lock) {
+            final boolean pending = (this.serialized != null);
+            this.serialize();
+            if (!pending) Bukkit.getScheduler().runTaskAsynchronously(this.owner, new AsynchronousWriter());
+        }
+
         this.taskSave = -1;
+    }
+
+    private void serialize() {
+        this.lastSerialization = System.currentTimeMillis();
+        this.serialized = BufferedYamlConfiguration.NEWLINE_ANY.matcher(this.saveToString()).replaceAll(BufferedYamlConfiguration.NEWLINE_PLATFORM);
     }
 
     public boolean isQueued() {
@@ -155,36 +172,34 @@ public class BufferedYamlConfiguration extends YamlConfiguration implements Runn
 
 
 
-    protected static class AsynchronousWriter implements Runnable {
-
-        protected final File file;
-        protected final String data;
-        protected final Logger logger;
-        protected final Object lock;
-
-        public AsynchronousWriter(final File file, final String data, final Logger logger, final Object lock) {
-            this.file = file;
-            this.data = data;
-            this.logger = logger;
-            this.lock = lock;
-        }
+    protected class AsynchronousWriter implements Runnable {
 
         @Override
         public synchronized void run() {
+            final File file = BufferedYamlConfiguration.this.file;
             try {
-                synchronized (this.lock) {
-                    if (!this.file.getParentFile().exists()) Files.createParentDirs(this.file);
-                    final Writer writer = new BufferedWriter(new FileWriter(this.file));
+                // ensure only a single async write occurs at a time
+                synchronized (BufferedYamlConfiguration.this.lock) {
+                    if (!file.getParentFile().exists()) Files.createParentDirs(file);
+
+                    final Writer writer = new BufferedWriter(new FileWriter(file));
                     try {
-                        writer.write(BufferedYamlConfiguration.NEWLINE_ANY.matcher(this.data).replaceAll(BufferedYamlConfiguration.NEWLINE_PLATFORM));
+                        writer.write(BufferedYamlConfiguration.this.serialized);
+
                     } finally {
-                        writer.close();
+                        try { writer.close(); } catch (final Throwable t) {}
+
+                        // mark serialized data as flushed to file
+                        BufferedYamlConfiguration.this.serialized = null;
                     }
                 }
+
             } catch (final IOException e) {
-                this.logger.log(Level.SEVERE, "Unable to save configuration file: {0}; {1}", new Object[] { this.file, e });
+                BufferedYamlConfiguration.this.logger.log(Level.SEVERE, "Unable to save configuration file: {0}; {1}", new Object[] { file, e });
+                return;
             }
-            this.logger.log(Level.FINEST, "Saved configuration file: {0}", this.file);
+
+            BufferedYamlConfiguration.this.logger.log(Level.FINEST, "Saved configuration file: {0}", file);
         }
 
     }
