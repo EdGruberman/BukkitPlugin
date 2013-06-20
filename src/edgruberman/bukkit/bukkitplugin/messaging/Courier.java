@@ -1,6 +1,9 @@
 package edgruberman.bukkit.bukkitplugin.messaging;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
@@ -137,7 +140,7 @@ public class Courier {
      * patterns stored in a
      * {@link org.bukkit.configuration.ConfigurationSection
      * ConfigurationSection}
-     * @version 6.1.1
+     * @version 7.0.0
      */
     public static class ConfigurationCourier extends Courier {
 
@@ -172,15 +175,23 @@ public class Courier {
          * @param key path relative to {@link #getBase base} that contains
          * message pattern
          * @return pattern at key translated into Minecraft formatting codes;
-         * null if key contains an empty String in base
+         * empty list if key contains null or an empty String
          */
-        public String translate(final String key) {
-            final String pattern = this.base.getString(key);
-            if (pattern == null || pattern.equals("")) {
+        public List<String> translate(final String key) {
+            final List<String> result = this.getStringList(key);
+            if (result.size() == 0 || result.get(0) == null || result.get(0).equals("")) {
                 this.plugin.getLogger().log(Level.FINEST, "String value not found for {0} in {1}", new Object[] { key, ( this.base.getCurrentPath().equals("") ? "(root)" : this.base.getCurrentPath() ) });
-                return null;
+                return Collections.emptyList();
             }
-            return ( this.formatCode == ChatColor.COLOR_CHAR ? pattern : ChatColor.translateAlternateColorCodes(this.formatCode, pattern) );
+
+            if (this.formatCode != ChatColor.COLOR_CHAR) {
+                for (int i = 0; i < result.size(); i++) {
+                    final String translated = ChatColor.translateAlternateColorCodes(this.formatCode, result.get(i));
+                    result.set(i, translated);
+                }
+            }
+
+            return result;
         }
 
         /**
@@ -188,11 +199,22 @@ public class Courier {
          * recipient (timestamp argument prepended if configured)
          * @param key path relative to {@link #getBase base} that contains
          * message pattern
+         * @return composed Message, null if key is null or empty string
          */
         public Message compose(final String key, final Object... arguments) {
-            final String pattern = this.translate(key);
-            if (pattern == null) return null;
-            return this.draft(pattern, arguments);
+            final List<String> translated = this.translate(key);
+
+            Message result = null;
+            for (final String pattern : translated) {
+                final Message drafted = this.draft(pattern, arguments);
+                if (result == null) {
+                    result = drafted;
+                } else {
+                    result.append(drafted);
+                }
+            }
+
+            return result;
         }
 
         /**
@@ -201,22 +223,25 @@ public class Courier {
          * @param key path relative to {@link #getBase base} that contains
          * message pattern
          */
-        public String format(final String key, final Object... arguments) {
-            final String pattern = this.translate(key);
-            if (pattern == null) return null;
-            return this.formatMessage(pattern, arguments);
+        public List<String> format(final String key, final Object... arguments) {
+            final List<String> result = this.translate(key);
+            for (int i = 0; i < result.size(); i++) {
+                final String formatted = this.formatMessage(result.get(i), arguments);
+                result.set(i, formatted);
+            }
+            return result;
         }
 
         /**
          * deliver message to individual player
          * @param key path relative to {@link #getBase base} that contains
-         * message pattern (null and missing patterns are silently ignored
-         * and not sent)
+         * message pattern (null and empty strings patterns are silently
+         * ignored and not sent)
          */
         public void send(final CommandSender sender, final String key, final Object... arguments) {
-            final String pattern = this.translate(key);
-            if (pattern == null) return;
-            this.sendMessage(sender, pattern, arguments);
+            final List<String> translated = this.translate(key);
+            if (translated.size() == 0) return;
+            for (final String pattern : translated) this.sendMessage(sender, pattern, arguments);
         }
 
         /**
@@ -226,9 +251,9 @@ public class Courier {
          * and not sent)
          */
         public void broadcast(final String key, final Object... arguments) {
-            final String pattern = this.translate(key);
-            if (pattern == null) return;
-            this.broadcastMessage(pattern, arguments);
+            final List<String> translated = this.translate(key);
+            if (translated.size() == 0) return;
+            for (final String pattern : translated) this.broadcastMessage(pattern, arguments);
         }
 
         /**
@@ -238,9 +263,9 @@ public class Courier {
          * and not sent)
          */
         public void world(final World world, final String key, final Object... arguments) {
-            final String pattern = this.translate(key);
-            if (pattern == null) return;
-            this.worldMessage(world, pattern, arguments);
+            final List<String> translated = this.translate(key);
+            if (translated.size() == 0) return;
+            for (final String pattern : translated) this.worldMessage(world, pattern, arguments);
         }
 
         /**
@@ -250,9 +275,19 @@ public class Courier {
          * and not sent)
          */
         public void publish(final String permission, final String key, final Object... arguments) {
-            final String pattern = this.translate(key);
-            if (pattern == null) return;
-            this.publishMessage(permission, pattern, arguments);
+            final List<String> translated = this.translate(key);
+            if (translated.size() == 0) return;
+            for (final String pattern : translated) this.publishMessage(permission, pattern, arguments);
+        }
+
+        protected List<String> getStringList(final String key) {
+            if (this.base.isList(key))
+                return this.base.getStringList(key);
+
+            if (this.base.isString(key))
+                return Arrays.asList(this.base.getString(key));
+
+            return Collections.emptyList();
         }
 
 
