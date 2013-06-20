@@ -1,34 +1,34 @@
-name: SimpleTemplate
+name: BukkitPlugin
 version: @VERSION@
 description: Template code used for Bukkit plugins
 author: EdGruberman (ed@rjump.com)
-website: http://github.com/EdGruberman/SimpleTemplate
-main: edgruberman.bukkit.simpletemplate.Main
+website: http://github.com/EdGruberman/BukkitPlugin
+main: edgruberman.bukkit.bukkitplugin.Main
 commands:
-  'simpletemplate:action':
-    aliases: [action, simpletemplate.action]
-    description: Reload SimpleTemplate plugin
-    permission: simpletemplate.command.action
+  'bukkitplugin:action':
+    aliases: [action, bukkitplugin.action]
+    description: Do something
+    permission: bukkitplugin.action
     usage: '§f-> §7Usage: §b§l/<command> §3[§oparameter§3]'
-  'simpletemplate:reload':
-    description: Reload SimpleTemplate plugin
-    permission: simpletemplate.reload
+  'bukkitplugin:reload':
+    description: Reload BukkitPlugin plugin
+    permission: bukkitplugin.reload
     usage: '§f-> §7Usage: §b§l/<command>'
 permissions:
-  simpletemplate.admin:
+  bukkitplugin.admin:
     description: Can use all features
     default: op
     children:
-      simpletemplate.user: true
-      simpletempate.reload: true
-  simpletemplate.user:
+      bukkitplugin.user: true
+      bukkitplugin.reload: true
+  bukkitplugin.user:
     description: Can use basic features
     default: true
     children:
-      simpletemplate.command.action: true
-  simpletemplate.command.action:
-    description: Can use command.action command
+      bukkitplugin.action: true
+  bukkitplugin.action:
+    description: Can use action command
     default: false
-  simpletemplate.reload:
+  bukkitplugin.reload:
     description: Can use reload command
     default: false

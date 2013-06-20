@@ -1,4 +1,4 @@
-package edgruberman.bukkit.simpletemplate.util;
+package edgruberman.bukkit.bukkitplugin.util;
 
 import java.io.BufferedWriter;
 import java.io.File;

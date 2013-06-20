@@ -1,4 +1,4 @@
-package edgruberman.bukkit.simpletemplate.util;
+package edgruberman.bukkit.bukkitplugin.util;
 
 import java.text.FieldPosition;
 import java.text.MessageFormat;

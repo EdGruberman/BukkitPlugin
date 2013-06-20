@@ -1,4 +1,4 @@
-package edgruberman.bukkit.simpletemplate.messaging;
+package edgruberman.bukkit.bukkitplugin.messaging;
 
 import java.text.DateFormat;
 import java.text.Format;

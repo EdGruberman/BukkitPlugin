@@ -1,11 +1,11 @@
-package edgruberman.bukkit.simpletemplate.commands;
+package edgruberman.bukkit.bukkitplugin.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
-import edgruberman.bukkit.simpletemplate.Main;
+import edgruberman.bukkit.bukkitplugin.Main;
 
 public final class Reload implements CommandExecutor {
 

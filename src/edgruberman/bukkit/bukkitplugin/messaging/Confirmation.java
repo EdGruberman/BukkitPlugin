@@ -1,4 +1,4 @@
-package edgruberman.bukkit.simpletemplate.messaging;
+package edgruberman.bukkit.bukkitplugin.messaging;
 
 import java.util.Collections;
 import java.util.List;

@@ -1,12 +1,12 @@
-package edgruberman.bukkit.simpletemplate;
+package edgruberman.bukkit.bukkitplugin;
 
-import edgruberman.bukkit.simpletemplate.commands.Reload;
-import edgruberman.bukkit.simpletemplate.messaging.Courier.ConfigurationCourier;
-import edgruberman.bukkit.simpletemplate.util.CustomPlugin;
+import edgruberman.bukkit.bukkitplugin.commands.Reload;
+import edgruberman.bukkit.bukkitplugin.messaging.Courier.ConfigurationCourier;
+import edgruberman.bukkit.bukkitplugin.util.CustomPlugin;
 
 public final class Main extends CustomPlugin {
 
-    public static edgruberman.bukkit.simpletemplate.messaging.Courier.ConfigurationCourier courier;
+    public static edgruberman.bukkit.bukkitplugin.messaging.Courier.ConfigurationCourier courier;
 
     @Override
     public void onLoad() {
