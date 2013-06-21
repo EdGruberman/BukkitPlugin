@@ -9,11 +9,11 @@ commands:
     aliases: [action, bukkitplugin.action]
     description: Do something
     permission: bukkitplugin.action
-    usage: '§f-> §7Usage: §b§l/<command> §3[§oparameter§3]'
+    usage: '§f-> §7Usage: §b/<command> §3[§oparameter§3]'
   'bukkitplugin:reload':
     description: Reload BukkitPlugin plugin
     permission: bukkitplugin.reload
-    usage: '§f-> §7Usage: §b§l/<command>'
+    usage: '§f-> §7Usage: §b/<command>'
 permissions:
   bukkitplugin.admin:
     description: Can use all features
