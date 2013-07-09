@@ -1,6 +1,6 @@
 format-code: '§'
 reload: '§f-> §2Reloaded §7{1} plugin' # 0 = generated, 1 = plugin name
 requires-player: '§f-> §cOnly in-game players§7 can use the §b/{1} §7command' # 0 = generated, 1 = command label
-requires-argument: '§f-> §cMissing §7required argument§8: §b{2,choice,0#§o|1#§l}{1}' # 0 = generated, 1 = argument name, 2 = lLiteral(0|1)
+requires-argument: '§f-> §cMissing §7required argument§8: §b{2,choice,0#§o|1#§l}{1}' # 0 = generated, 1 = argument name, 2 = literal(0|1)
 unknown-argument: '§f-> §eUnknown§f value for §b{2,choice,0#§o|1#§l}{1}§8: §f{3}' # 0 = generated, 1 = argument name, 2 = literal(0|1), 3 = argument value
 version: @VERSION@
