@@ -6,7 +6,7 @@ import edgruberman.bukkit.bukkitplugin.util.CustomPlugin;
 
 public final class Main extends CustomPlugin {
 
-    public static edgruberman.bukkit.bukkitplugin.messaging.Courier.ConfigurationCourier courier;
+    public static ConfigurationCourier courier;
 
     @Override
     public void onLoad() {
