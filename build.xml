@@ -14,10 +14,10 @@
   <property name="dist.dir" location="dist" />
 
   <property name="version.properties" location="version.properties" />
-  <available file="${version.properties}" property="version.available"/>
+  <available file="${version.properties}" property="version.available" />
 
   <property file="plugin.properties" />
-  <basename property="plugin.name" file="${basedir}"/>
+  <basename property="plugin.name" file="${basedir}" />
 
   <property name="install.dir" location="${bukkit.install.dir}" />
   <property name="update.dir" location="${install.dir}/update" />
