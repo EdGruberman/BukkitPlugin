@@ -4,18 +4,20 @@ import java.text.DateFormat;
 import java.text.Format;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 /**
  * {@link java.text.MessageFormat MessageFormat} that sets time zone of each date argument for target
- *
  * @author EdGruberman (ed@rjump.com)
- * @version 3.0.0
+ * @version 4.0.0
  */
 public class Message extends MessageFormat {
 
@@ -78,8 +80,14 @@ public class Message extends MessageFormat {
         return this;
     }
 
+    /** @return suffix directly appended to this Message */
     public Message getSuffix() {
         return this.suffix;
+    }
+
+    /** @return number of messages, including this one, chained through suffixes */
+    public int count() {
+        return ( this.suffix != null ? this.suffix.count() + 1 : 1 );
     }
 
     /** format message for sending to a generic target */
@@ -89,10 +97,6 @@ public class Message extends MessageFormat {
     }
 
 
-
-    public static Factory create(final String pattern, final Object... arguments) {
-        return Factory.create(pattern, arguments);
-    }
 
     public static class Factory {
 
@@ -118,6 +122,106 @@ public class Message extends MessageFormat {
 
         public Message build() {
             return new Message(this.pattern, this.arguments);
+        }
+
+    }
+
+
+
+    /**
+     * summary of {@link Message} delivery
+     * @author EdGruberman (ed@rjump.com)
+     * @version 4.0.0
+     */
+    public static class Confirmation {
+
+        protected final String pattern;
+
+        protected final Object[] arguments;
+
+        /** visibility of log entry */
+        protected final Level level;
+
+        /** count of recipients message was delivered to */
+        protected final List<CommandSender> received;
+
+        /**
+         * @param level visibility of log entry
+         * @param received count of recipients message was delivered to
+         * @param pattern {@link java.text.MessageFormat MessageFormat} pattern
+         * @param arguments pattern arguments
+         */
+        public Confirmation(final Level level, final List<CommandSender> received, final String pattern, final Object... arguments) {
+            this.pattern = pattern;
+            this.arguments = arguments;
+            this.level = level;
+            this.received = received;
+        }
+
+        /** visibility of log entry */
+        public Level getLevel() {
+            return this.level;
+        }
+
+        /** count of recipients message was delivered to */
+        public List<CommandSender> getReceived() {
+            return Collections.unmodifiableList(this.received);
+        }
+
+        /** lazy log record */
+        public LogRecord toLogRecord() {
+            final LogRecord record = new LogRecord(this.level, this.pattern);
+            record.setParameters(this.arguments);
+            return record;
+        }
+
+    }
+
+
+
+    /**
+     * groups multiple {@link Message} instances into pages
+     * @author EdGruberman (ed@rjump.com)
+     * @version 1.0.0
+     */
+    public static class Paginator {
+
+        public static final int DEFAULT_PAGE_HEIGHT = 8;
+
+        private final List<Message> contents;
+        private final int pageSize;
+
+        public Paginator(final List<Message> contents) {
+            this(contents, Paginator.DEFAULT_PAGE_HEIGHT);
+        }
+
+        public Paginator(final List<Message> contents, final int pageSize) {
+            this.contents = contents;
+            this.pageSize = pageSize;
+        }
+
+        /** @return number of messages per page */
+        public int getPageSize() {
+            return this.pageSize;
+        }
+
+        public List<Message> getContents() {
+            return this.contents;
+        }
+
+        /**
+         * @param index zero based page number
+         * @return messages on page
+         */
+        public List<Message> page(final int index) {
+            return this.contents.subList(index * this.pageSize, ((index + 1) * this.pageSize) - 1);
+        }
+
+        /** @return total number of pages */
+        public int count() {
+            int messages = 0;
+            for (final Message message : this.contents) messages += message.count();
+            return (int) Math.ceil((double) messages / this.pageSize);
         }
 
     }
