@@ -13,6 +13,7 @@ import java.util.logging.LogRecord;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * {@link java.text.MessageFormat MessageFormat} that sets time zone of each date argument for target
@@ -182,17 +183,22 @@ public class Message extends MessageFormat {
     /**
      * groups multiple {@link Message} instances into pages
      * @author EdGruberman (ed@rjump.com)
-     * @version 1.0.0
+     * @version 1.1.0
      */
     public static class Paginator {
 
-        public static final int DEFAULT_PAGE_HEIGHT = 8;
+        public static final int DEFAULT_PAGE_HEIGHT_PLAYER = 8;
+        public static final int DEFAULT_PAGE_HEIGHT_CONSOLE = -1;
 
         private final List<Message> contents;
         private final int pageSize;
 
         public Paginator(final List<Message> contents) {
-            this(contents, Paginator.DEFAULT_PAGE_HEIGHT);
+            this(contents, Paginator.DEFAULT_PAGE_HEIGHT_PLAYER);
+        }
+
+        public Paginator(final List<Message> contents, final CommandSender target) {
+            this(contents, ( target instanceof Player ? Paginator.DEFAULT_PAGE_HEIGHT_PLAYER : Paginator.DEFAULT_PAGE_HEIGHT_CONSOLE ));
         }
 
         public Paginator(final List<Message> contents, final int pageSize) {
@@ -214,11 +220,18 @@ public class Message extends MessageFormat {
          * @return messages on page
          */
         public List<Message> page(final int index) {
-            return this.contents.subList(index * this.pageSize, ((index + 1) * this.pageSize) - 1);
+            if (this.pageSize < 1) {
+                if (index != 0) throw new IllegalArgumentException("page index not available: " + index);
+                return this.contents;
+            }
+
+            final int last = ((index + 1) * this.pageSize) - 1;
+            return this.contents.subList(index * this.pageSize, ( last <= this.contents.size() ? last : this.contents.size() ));
         }
 
         /** @return total number of pages */
         public int count() {
+            if (this.pageSize < 1) return 1;
             int messages = 0;
             for (final Message message : this.contents) messages += message.count();
             return (int) Math.ceil((double) messages / this.pageSize);
