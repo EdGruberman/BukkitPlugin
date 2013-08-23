@@ -27,25 +27,6 @@ public class SynchronousPluginLogger extends Logger {
 
 
 
-    private static class LogWriter implements Runnable {
-
-        private final Logger logger;
-        private final LogRecord record;
-
-        LogWriter(final Logger logger, final LogRecord record) {
-            this.logger = logger;
-            this.record = record;
-        }
-
-        @Override
-        public void run() {
-            this.logger.log(this.record);
-        }
-
-    }
-
-
-
     private final Plugin plugin;
     private String pattern;
 
@@ -78,6 +59,25 @@ public class SynchronousPluginLogger extends Logger {
 
         @Override
         public void close() throws SecurityException {}
+
+    }
+
+
+
+    private static class LogWriter implements Runnable {
+
+        private final Logger logger;
+        private final LogRecord record;
+
+        LogWriter(final Logger logger, final LogRecord record) {
+            this.logger = logger;
+            this.record = record;
+        }
+
+        @Override
+        public void run() {
+            this.logger.log(this.record);
+        }
 
     }
 
