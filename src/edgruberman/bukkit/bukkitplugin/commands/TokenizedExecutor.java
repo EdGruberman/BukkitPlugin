@@ -1,4 +1,4 @@
-package edgruberman.bukkit.bukkitplugin.util;
+package edgruberman.bukkit.bukkitplugin.commands;
 
 import java.util.Arrays;
 import java.util.List;
