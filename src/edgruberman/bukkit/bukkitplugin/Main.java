@@ -6,8 +6,6 @@ import edgruberman.bukkit.bukkitplugin.util.CustomPlugin;
 
 public final class Main extends CustomPlugin {
 
-    public static ConfigurationCourier courier;
-
     @Override
     public void onLoad() {
         this.putConfigMinimum("0.0.0a0");
@@ -17,16 +15,16 @@ public final class Main extends CustomPlugin {
     @Override
     public void onEnable() {
         this.reloadConfig();
-        Main.courier = ConfigurationCourier.Factory.create(this).setBase(this.loadConfig("language.yml")).setFormatCode("format-code").build();
+        final ConfigurationCourier courier = ConfigurationCourier.Factory.create(this).setBase(this.loadConfig("language.yml")).setFormatCode("format-code").build();
 
-        // TODO things
+        // TODO do things
 
-        this.getCommand("simpletemplate:reload").setExecutor(new Reload(this));
+        this.getCommand("simpletemplate:reload").setExecutor(new Reload(courier, this));
     }
 
     @Override
     public void onDisable() {
-        Main.courier = null;
+        // TODO undo things
     }
 
 }
