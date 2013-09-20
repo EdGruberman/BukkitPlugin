@@ -7,9 +7,9 @@ public class IntegerParameter extends Parameter<Integer> {
     }
 
     @Override
-    public Integer parseParameter(final ExecutionRequest request) throws ArgumentContingency {
+    public Integer parse(final ExecutionRequest request) throws ArgumentContingency {
         final String argument = request.getArgument(this.index);
-        if (argument == null) return this.defaultValue;
+        if (argument == null) return null;
 
         try {
             return Integer.parseInt(argument);
@@ -30,13 +30,13 @@ public class IntegerParameter extends Parameter<Integer> {
         }
 
         @Override
-        public IntegerParameter build() {
-            return new IntegerParameter(this);
+        public IntegerParameter.Factory cast() {
+            return this;
         }
 
         @Override
-        public IntegerParameter.Factory cast() {
-            return this;
+        public IntegerParameter build() {
+            return new IntegerParameter(this);
         }
 
     }

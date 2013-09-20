@@ -10,7 +10,7 @@ public class RemainingParameter extends Parameter<List<String>> {
     }
 
     @Override
-    public List<String> parseParameter(final ExecutionRequest request) throws ArgumentContingency {
+    public List<String> parse(final ExecutionRequest request) throws ArgumentContingency {
         if (this.index >= request.getArguments().size()) return Collections.emptyList();
         return request.getArguments().subList(this.index, request.getArguments().size());
     }
@@ -26,13 +26,13 @@ public class RemainingParameter extends Parameter<List<String>> {
         }
 
         @Override
-        public RemainingParameter build() {
-            return new RemainingParameter(this);
+        public RemainingParameter.Factory cast() {
+            return this;
         }
 
         @Override
-        public RemainingParameter.Factory cast() {
-            return this;
+        public RemainingParameter build() {
+            return new RemainingParameter(this);
         }
 
     }

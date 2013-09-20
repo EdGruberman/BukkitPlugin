@@ -14,10 +14,12 @@ public class OfflinePlayerParameter extends Parameter<OfflinePlayer> {
     }
 
     @Override
-    public OfflinePlayer parseParameter(final ExecutionRequest request) throws ArgumentContingency {
+    public OfflinePlayer parse(final ExecutionRequest request) throws ArgumentContingency {
         String argument = request.getArgument(this.index);
 
         if (argument == null) {
+            if (this.defaultValue != null) return null;
+
             if (!(request.getSender() instanceof Player)) throw new MissingArgumentContingency(request, this);
             argument = request.getSender().getName();
         }
@@ -43,13 +45,13 @@ public class OfflinePlayerParameter extends Parameter<OfflinePlayer> {
         }
 
         @Override
-        public OfflinePlayerParameter build() {
-            return new OfflinePlayerParameter(this);
+        public OfflinePlayerParameter.Factory cast() {
+            return this;
         }
 
         @Override
-        public OfflinePlayerParameter.Factory cast() {
-            return this;
+        public OfflinePlayerParameter build() {
+            return new OfflinePlayerParameter(this);
         }
 
     }

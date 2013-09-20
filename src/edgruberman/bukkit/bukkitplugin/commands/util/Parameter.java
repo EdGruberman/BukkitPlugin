@@ -36,18 +36,11 @@ public abstract class Parameter<T> {
         return this.defaultValue;
     }
 
-    /** @throws ArgumentContingency when the value can not be parsed */
-    public final T parse(final ExecutionRequest request) throws ArgumentContingency {
-        if (this.required && !request.isExplicit(this)) throw new MissingArgumentContingency(request, this);
-        final T result = this.parseParameter(request);
-        return ( result != null ? result : this.getDefaultValue() );
-    }
-
     /**
      * @throws ArgumentContingency when the value can not be parsed
      * @return null when default value should be used
      */
-    protected abstract T parseParameter(ExecutionRequest request) throws ArgumentContingency;
+    protected abstract T parse(ExecutionRequest request) throws ArgumentContingency;
 
 
 
@@ -87,9 +80,9 @@ public abstract class Parameter<T> {
             return this.cast();
         }
 
-        public abstract P build();
-
         public abstract F cast();
+
+        public abstract P build();
 
     }
 

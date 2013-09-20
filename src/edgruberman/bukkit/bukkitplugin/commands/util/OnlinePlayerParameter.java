@@ -13,10 +13,12 @@ public class OnlinePlayerParameter extends Parameter<Player> {
     }
 
     @Override
-    public Player parseParameter(final ExecutionRequest request) throws ArgumentContingency {
+    public Player parse(final ExecutionRequest request) throws ArgumentContingency {
         String argument = request.getArgument(this.index);
 
         if (argument == null) {
+            if (this.defaultValue != null) return null;
+
             if (!(request.getSender() instanceof Player)) throw new MissingArgumentContingency(request, this);
             argument = request.getSender().getName();
         }
@@ -45,13 +47,13 @@ public class OnlinePlayerParameter extends Parameter<Player> {
         }
 
         @Override
-        public OnlinePlayerParameter build() {
-            return new OnlinePlayerParameter(this);
+        public OnlinePlayerParameter.Factory cast() {
+            return this;
         }
 
         @Override
-        public OnlinePlayerParameter.Factory cast() {
-            return this;
+        public OnlinePlayerParameter build() {
+            return new OnlinePlayerParameter(this);
         }
 
     }

@@ -7,7 +7,7 @@ public class StringParameter extends Parameter<String> {
     }
 
     @Override
-    public String parseParameter(final ExecutionRequest request) throws ArgumentContingency {
+    public String parse(final ExecutionRequest request) throws ArgumentContingency {
         return request.getArgument(this.index);
     }
 
@@ -22,13 +22,13 @@ public class StringParameter extends Parameter<String> {
         }
 
         @Override
-        public StringParameter build() {
-            return new StringParameter(this);
+        public StringParameter.Factory cast() {
+            return this;
         }
 
         @Override
-        public StringParameter.Factory cast() {
-            return this;
+        public StringParameter build() {
+            return new StringParameter(this);
         }
 
     }

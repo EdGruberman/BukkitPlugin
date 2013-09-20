@@ -1,5 +1,6 @@
 package edgruberman.bukkit.bukkitplugin.commands.util;
 
+
 /** contains information on a value that could not be parsed for a Parameter */
 public class ArgumentContingency extends CancellationContingency {
 

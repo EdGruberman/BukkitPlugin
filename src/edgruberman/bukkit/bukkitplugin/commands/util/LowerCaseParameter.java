@@ -12,9 +12,10 @@ public class LowerCaseParameter extends Parameter<String> {
     }
 
     @Override
-    public String parseParameter(final ExecutionRequest request) throws ArgumentContingency {
+    public String parse(final ExecutionRequest request) throws ArgumentContingency {
         final String argument = request.getArgument(this.index);
-        if (argument == null) return argument;
+        if (argument == null) return null;
+
         return argument.toLowerCase(this.locale);
     }
 
@@ -36,13 +37,13 @@ public class LowerCaseParameter extends Parameter<String> {
         }
 
         @Override
-        public LowerCaseParameter build() {
-            return new LowerCaseParameter(this);
+        public LowerCaseParameter.Factory cast() {
+            return this;
         }
 
         @Override
-        public LowerCaseParameter.Factory cast() {
-            return this;
+        public LowerCaseParameter build() {
+            return new LowerCaseParameter(this);
         }
 
     }
