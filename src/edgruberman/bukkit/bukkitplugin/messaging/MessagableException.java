@@ -3,20 +3,20 @@ package edgruberman.bukkit.bukkitplugin.messaging;
 /**
  * exception that can be used to format a message to a recipient
  * @author EdGruberman (ed@rjump.com)
- * @version 1.0.0
+ * @version 2.0.0
  */
-public class MessagableException extends Exception {
+public abstract class MessagableException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
     private final Object[] arguments;
 
-    public MessagableException(final String message, final Object... arguments) {
+    protected MessagableException(final String message, final Object... arguments) {
         super(message);
         this.arguments = arguments;
     }
 
-    public MessagableException(final Throwable cause, final String message, final Object... arguments) {
+    protected MessagableException(final Throwable cause, final String message, final Object... arguments) {
         super(message, cause);
         this.arguments = arguments;
     }
