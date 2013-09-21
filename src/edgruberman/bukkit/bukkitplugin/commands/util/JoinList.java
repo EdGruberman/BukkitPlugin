@@ -12,9 +12,9 @@ import org.bukkit.configuration.ConfigurationSection;
  * allows object references to be stored for lazy MessageFormat formatting
  *
  * @author EdGruberman (ed@rjump.com)
- * @version 1.6.0
+ * @version 1.7.0
  */
-public class JoinList<T> extends ArrayList<T> {
+public class JoinList<E> extends ArrayList<E> {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,28 +28,28 @@ public class JoinList<T> extends ArrayList<T> {
 
 
 
-    public static String join(final Collection<?> collection) {
-        return JoinList.join(collection, JoinList.DEFAULT_DELIMITER);
+    public static <T> JoinList<T> create(final Collection<? extends T> collection) {
+        return JoinList.create(collection, JoinList.DEFAULT_DELIMITER);
     }
 
-    public static String join(final Collection<?> collection, final String delimiter) {
-        return JoinList.join(collection, delimiter, JoinList.DEFAULT_ITEM);
+    public static <T> JoinList<T> create(final Collection<? extends T> collection, final String delimiter) {
+        return JoinList.create(collection, delimiter, JoinList.DEFAULT_ITEM);
     }
 
-    public static String join(final Collection<?> collection, final String delimiter, final String item) {
-        return JoinList.join(collection, delimiter, item, JoinList.DEFAULT_FORMAT);
+    public static <T> JoinList<T> create(final Collection<? extends T> collection, final String delimiter, final String item) {
+        return JoinList.create(collection, delimiter, item, JoinList.DEFAULT_FORMAT);
     }
 
-    public static String join(final Collection<?> collection, final String delimiter, final String item, final String format) {
-        final JoinList<Object> list = new JoinList<Object>(format, item, delimiter);
-        list.addAll(collection);
-        return list.toString();
+    public static <T> JoinList<T> create(final Collection<? extends T> elements, final String delimiter, final String item, final String format) {
+        final JoinList<T> result = new JoinList<T>(format, item, delimiter);
+        result.addAll(elements);
+        return result;
     }
 
-    public static String join(final Collection<?> collection, final ConfigurationSection config, final String prefix) {
-        final JoinList<Object> list = new JoinList<Object>(config, prefix);
-        list.addAll(collection);
-        return list.toString();
+    public static <T> JoinList<T> create(final Collection<? extends T> elements, final ConfigurationSection config, final String prefix) {
+        final JoinList<T> result = new JoinList<T>(config, prefix);
+        result.addAll(elements);
+        return result;
     }
 
 
@@ -86,9 +86,8 @@ public class JoinList<T> extends ArrayList<T> {
         return this.add((Object) arguments);
     }
 
-    @Override
-    public String toString() {
-        final Iterator<T> i = this.iterator();
+    public String join() {
+        final Iterator<E> i = this.iterator();
         if (!i.hasNext()) return MessageFormat.format(this.format, "");
 
         final StringBuilder items = new StringBuilder();
@@ -111,6 +110,11 @@ public class JoinList<T> extends ArrayList<T> {
         }
 
         return MessageFormat.format(this.format, items);
+    }
+
+    @Override
+    public String toString() {
+        return this.join();
     }
 
 }

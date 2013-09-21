@@ -64,7 +64,7 @@ public abstract class Executor implements CommandExecutor {
     }
 
     protected List<String> tokenize(final String... args) {
-        this.tokenizer.reset(JoinList.join(Arrays.asList(args)));
+        this.tokenizer.reset(JoinList.create(Arrays.asList(args)).join());
         return Arrays.asList(this.tokenizer.getTokenArray());
     }
 

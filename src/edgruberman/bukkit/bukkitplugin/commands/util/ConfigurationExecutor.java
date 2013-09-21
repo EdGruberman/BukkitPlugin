@@ -14,7 +14,7 @@ public abstract class ConfigurationExecutor extends Executor {
         // concatenate values for limited
         if (factory instanceof LimitedParameter.Factory) {
             final LimitedParameter.Factory<?, ?, ?> limited = (LimitedParameter.Factory<?, ?, ?>) factory;
-            final String acceptable = JoinList.join(limited.acceptable, this.courier.getBase(), "argument-syntax-limited-");
+            final String acceptable = JoinList.create(limited.acceptable, this.courier.getBase(), "argument-syntax-limited-").join();
             factory.setSyntax(acceptable);
 
         // use name for all others
