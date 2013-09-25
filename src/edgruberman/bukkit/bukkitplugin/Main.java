@@ -2,9 +2,9 @@ package edgruberman.bukkit.bukkitplugin;
 
 import edgruberman.bukkit.bukkitplugin.commands.Reload;
 import edgruberman.bukkit.bukkitplugin.messaging.Courier.ConfigurationCourier;
-import edgruberman.bukkit.bukkitplugin.util.CustomPlugin;
+import edgruberman.bukkit.bukkitplugin.util.DefaultPlugin;
 
-public final class Main extends CustomPlugin {
+public final class Main extends DefaultPlugin {
 
     @Override
     public void onLoad() {
