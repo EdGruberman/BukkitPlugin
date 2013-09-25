@@ -25,21 +25,23 @@ import edgruberman.bukkit.bukkitplugin.versioning.Version;
 
 /**
  * @author EdGruberman (ed@rjump.com)
- * @version 2.0.0
+ * @version 3.0.0
  */
 public class DefaultPlugin extends JavaPlugin {
+
+    public static final Level DEFAULT_LOG_LEVEL = Level.INFO;
+
+    public static final String KEY_LOG_LEVEL = "log-level";
 
     public static final Charset CONFIGURATION_TARGET = Charset.defaultCharset();
     public static final Charset CONFIGURATION_SOURCE = Charset.forName("UTF-8");
     public static final String CONFIGURATION_ARCHIVE = "{0} - Archive version {1} - {2,date,yyyyMMddHHmmss}.yml"; // 0 = name, 1 = version, 2 = date
     public static final String CONFIGURATION_FILE = "config.yml";
-    public static final Level DEFAULT_LOG = Level.INFO;
-    public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
     /** minimum version required for configuration files; indexed by relative file name (e.g. "config.yml") */
     private final Map<String, Version> configurationMinimums = new HashMap<String, Version>();
+
     private FileConfiguration config = null;
-    private char pathSeparator = '.';
 
     public void putConfigMinimum(final String version) {
         this.putConfigMinimum(DefaultPlugin.CONFIGURATION_FILE, version);
@@ -47,11 +49,6 @@ public class DefaultPlugin extends JavaPlugin {
 
     public void putConfigMinimum(final String resource, final String version) {
         this.configurationMinimums.put(resource, StandardVersion.parse(version));
-    }
-
-    public DefaultPlugin setPathSeparator(final char separator) {
-        this.pathSeparator = separator;
-        return this;
     }
 
     @Override
@@ -63,7 +60,7 @@ public class DefaultPlugin extends JavaPlugin {
     @Override
     public void reloadConfig() {
         this.config = this.loadConfig(DefaultPlugin.CONFIGURATION_FILE);
-        this.setLogLevel(this.getConfig().getString("log-level"));
+        this.setLogLevel(this.getConfig().getString(DefaultPlugin.KEY_LOG_LEVEL));
         this.getLogger().log(Level.FINEST, "YAML configuration file encoding: {0}", DefaultPlugin.CONFIGURATION_TARGET);
     }
 
@@ -73,35 +70,34 @@ public class DefaultPlugin extends JavaPlugin {
     }
 
     /** @param resource file name relative to plugin data folder and base of jar (embedded file extracted to file system if does not exist) */
-    public FileConfiguration loadConfig(final String resource) {
-        return this.loadConfig(resource, this.pathSeparator, this.configurationMinimums.get(resource));
+    public VersionedYamlConfiguration loadConfig(final String resource) {
+        return this.loadConfig(resource, this.configurationMinimums.get(resource));
     }
 
     /** @param resource file name relative to plugin data folder and base of jar (embedded file extracted to file system if does not exist) */
-    public FileConfiguration loadConfig(final String resource, final char pathSeparator, final Version required) {
+    public VersionedYamlConfiguration loadConfig(final String resource, final Version required) {
         // extract default if not existing
         this.extractConfig(resource, false);
 
         final File existing = new File(this.getDataFolder(), resource);
-        final VersionedYamlConfiguration yaml = new VersionedYamlConfiguration();
-        yaml.options().pathSeparator(pathSeparator);
+        final VersionedYamlConfiguration result = new VersionedYamlConfiguration();
         try {
-            yaml.load(existing);
+            result.load(existing);
         } catch (final InvalidConfigurationException e) {
             throw new IllegalStateException("Unable to load configuration file: " + existing.getPath() + " (Ensure file is encoded as " + DefaultPlugin.CONFIGURATION_TARGET + ")", e);
         } catch (final Exception e) {
             throw new RuntimeException("Unable to load configuration file: " + existing.getPath(), e);
         }
-        if (required == null) return yaml;
+        if (required == null) return result;
 
         // verify required or later version
-        final Version version = yaml.getVersion();
-        if (version.compareTo(required) >= 0) return yaml;
+        final Version version = result.getVersion();
+        if (version.compareTo(required) >= 0) return result;
 
         this.archiveConfig(resource, version);
 
         // extract default and reload
-        return this.loadConfig(resource, pathSeparator, null);
+        return this.loadConfig(resource, null);
     }
 
     /** extract embedded configuration file from jar, translating character encoding to default character set */
@@ -120,7 +116,7 @@ public class DefaultPlugin extends JavaPlugin {
             out.close(); in.close();
 
         } catch (final Exception e) {
-            throw new IllegalArgumentException("Could not extract configuration file \"" + resource + "\" to " + config.getPath() + "\"", e);
+            throw new IllegalStateException("Could not extract configuration file \"" + resource + "\" to " + config.getPath() + "\"", e);
         }
     }
 
@@ -138,7 +134,7 @@ public class DefaultPlugin extends JavaPlugin {
     public void setLogLevel(final String name) {
         Level level;
         try { level = Level.parse(name); } catch (final Exception e) {
-            level = DefaultPlugin.DEFAULT_LOG;
+            level = DefaultPlugin.DEFAULT_LOG_LEVEL;
             this.getLogger().warning("Log level defaulted to " + level.getName() + "; Unrecognized java.util.logging.Level: " + name + "; " + e);
         }
 

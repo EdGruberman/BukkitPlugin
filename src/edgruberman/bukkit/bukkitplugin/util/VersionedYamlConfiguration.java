@@ -35,7 +35,7 @@ public class VersionedYamlConfiguration extends YamlConfiguration {
         final Matcher matcher = VersionedYamlConfiguration.VERSION_TAG.matcher(header);
         if (!matcher.matches() || matcher.groupCount() == 0) return null;
 
-        return matcher.group(0);
+        return matcher.group(1);
     }
 
 }
