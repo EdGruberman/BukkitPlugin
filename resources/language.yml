@@ -1,13 +1,13 @@
+# @version @VERSION@
 format-code: '§'
 reload: '§f-> §2Reloaded §7{1} plugin' # 0 = generated, 1 = plugin name
 sender-rejected: '§f-> §cOnly {1} §7can use the §b/{2} §7command' # 0 = generated, 1 = acceptable, 2 = label
-sender-rejected-acceptable-item: '§c{0}s' # 0 = name
-sender-rejected-acceptable-delimiter: '§4,'
+sender-rejected-valid-item: '§c{0}s' # 0 = name
+sender-rejected-valid-delimiter: '§4,'
 argument-missing: '§f-> §cMissing §7required argument§8: {2}' # 0 = generated, 1 = name 2 = syntax
 argument-unknown: '§f-> §cUnknown§7 argument for {2}§8: §f{3}' # 0 = generated, 1 = name, 2 = syntax, 3 = value
 argument-syntax-name: '§3§o{0}' # 0 = name
-argument-syntax-limited-item: '§b{0}' # 0 = value
-argument-syntax-limited-delimiter: '§3|'
+argument-syntax-known-item: '§b{0}' # 0 = value
+argument-syntax-known-delimiter: '§3|'
 argument-syntax-required: '{0}' # 0 = argument
 argument-syntax-optional: '§3[{0}§3]' # 0 = argument
-version: @VERSION@

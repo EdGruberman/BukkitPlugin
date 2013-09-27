@@ -2,14 +2,14 @@ package edgruberman.bukkit.bukkitplugin;
 
 import edgruberman.bukkit.bukkitplugin.commands.Reload;
 import edgruberman.bukkit.bukkitplugin.messaging.Courier.ConfigurationCourier;
-import edgruberman.bukkit.bukkitplugin.util.DefaultPlugin;
+import edgruberman.bukkit.bukkitplugin.util.StandardPlugin;
 
-public final class Main extends DefaultPlugin {
+public final class Main extends StandardPlugin {
 
     @Override
     public void onLoad() {
-        this.putConfigMinimum("0.0.0a0");
-        this.putConfigMinimum("language.yml", "0.0.0a0");
+        this.putDefinition(StandardPlugin.CONFIGURATION_FILE, Configuration.getDefinition(StandardPlugin.CONFIGURATION_FILE));
+        this.putDefinition("language.yml", Configuration.getDefinition("language.yml"));
     }
 
     @Override

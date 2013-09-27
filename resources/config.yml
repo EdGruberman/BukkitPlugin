@@ -1,2 +1,2 @@
+# @version @VERSION@
 log-level: INFO
-version: @VERSION@
